@@ -15,12 +15,15 @@
 
 - name: install iptables centos 6
   yum:
-    name: iptables
+    name:
+      - libselinux-python
+      - iptables
   when: ansible_distribution_major_version|int == 6
 
 - name: install iptables centos 7
   yum:
     name:
+      - libselinux-python
       - iptables
       - iptables-services
   when: ansible_distribution_major_version|int == 7
@@ -29,3 +32,22 @@
   service:
     name: iptables
     enabled: "{{ firewall_enable_on_boot }}"
+
+- name: iptables templates
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/sysconfig/{{ item }}"
+    owner: root
+    group: root
+    mode: 0600
+  loop:
+    - iptables
+    - ip6tables
+
+- name: reload iptables
+  service:
+    name: "{{ item }}"
+    state: reloaded
+  loop:
+    - iptables
+    - ip6tables

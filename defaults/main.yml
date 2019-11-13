@@ -2,3 +2,16 @@
 firewall_disable_firewalld: true
 firewall_disable_ufw: true
 firewall_enable_on_boot: true
+
+firewall_policy_input: DROP
+firewall_policy_forward: ACCEPT
+firewall_policy_output: ACCEPT
+
+firewall_log_enabled: true
+firewall_log_level: -m limit --limit 3/min --limit-burst 10
+
+firewall4_default_raw: ''
+firewall4_raw: ''
+
+firewall6_default_raw: ''
+firewall6_raw: ''

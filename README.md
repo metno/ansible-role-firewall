@@ -1,18 +1,19 @@
 firewall
 =========
 
-A simple firewall for Linux hosts, based on the common iptables/netfilter commands. This role is heavily inspired by [geerlingguy/firewall](https://github.com/geerlingguy/ansible-role-firewall). Some code is reused directly. Other code is new, and adjusted for MET Norways usecase.
+A simple firewall for Linux hosts, based on the common iptables/netfilter commands. This role is inspired by [UFW](https://en.wikipedia.org/wiki/Uncomplicated_Firewall "Uncomplicated Firewall") and [geerlingguy/firewall](https://github.com/geerlingguy/ansible-role-firewall).
+
+
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
-
 This role is limited to
 
-* Ubuntu 18.04
-* Ubuntu 16.04
-* Ubuntu 12.04
+* Ubuntu 18.04 - Bionic
+* Ubuntu 16.04 - Xenial
+* Ubuntu 14.04 - Trusty
+* Ubuntu 12.04 - Precise
 * Centos 7
 * Centos 6
 
@@ -20,15 +21,30 @@ Role Variables
 --------------
 
 * `firewall_disable_firewalld` --- disable firewalld on RedHat systems, default `true`.
-* `firewall_disalbe_ufw` --- disable ufw on Debian based systems, default `true`.
+* `firewall_disable_ufw` --- disable ufw on Debian based systems, default `true`.
 * `firewall_enable_on_boot` --- enable firewall on boot, default `true`.
-
+* `firewall_log_enabled` --- enable firewall logging, default `true`.
+* `firewall_log_level` --- how much to log of dropped packages, default `-m limit --limit 3/min --limit-burst 10`.
+* `firewall_policy_input`, `firewall_policy_forward`, `firewall_policy_output` --- set policies for firewall, default `SKIP`.
+  * `ACCEPT` --- accept all packages.
+  * `DROP` --- drop packages silently.
+  * `SKIP` --- do not administrate this chain.
+* `firewall4_default_raw` --- lines with raw iptables chain rules for ipv4 separated by enter, default `''`. Use the following chain names, see examples for more context.
+  * `fw4-input` --- input chain ipv4, used when `firewall_policy_input` is set to `DROP`
+  * `fw4-forward` --- forward chain ipv4, used when `firewall_policy_forward` is set to `DROP`.
+  * `fw4-output` --- output chain ipv4, used when `firewall_policy_output` is set to `DROP`.
+* `firewall6_default_raw` --- lines with raw iptables chain rules for ipv6 separated by enter, default `''`. Use the following chain names, see examples for more context.
+  * `fw6-input` --- input chain ipv4, used when `firewall_policy_input` is set to `DROP`
+  * `fw6-forward` --- forward chain ipv4, used when `firewall_policy_forward` is set to `DROP`.
+  * `fw6-output` --- output chain ipv4, used when `firewall_policy_output` is set to `DROP`.
+* `firewall4_raw` --- lines with raw iptables rules for ipv4 separated with enter - use same chain names as `firewall4_default_raw`, default `''`.
+* `firewall6_raw` --- lines with raw iptables rules for ipv6 separated with enter - use same chain names as `firewall6_default_raw`, default `''`.
 
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+None.
 
 Example Playbook
 ----------------
@@ -37,7 +53,33 @@ Including an example of how to use your role (for instance, with variables passe
 
     - hosts: servers
       roles:
-         - { role: username.rolename, x: 42 }
+         - role: firewall
+           firewall_policy_input: DROP
+           firewall_policy_forward: DROP
+           firewall_policy_output: ACCEPT
+           firewall_log_enabled: true
+           firewall6_default_raw: |
+             -A fw6-ansible-input -p tcp -m tcp --dport 22 -j ACCEPT
+
+Testing
+-------
+
+### Test environment for all OSes
+
+```bash
+cd tests
+vagrant up
+vagrant provision
+```
+
+### Debug interactively
+
+This uses cluster ssh to work with all vagrant boxes at the same time.
+
+```bash
+vagrant ssh-config > ~/.ssh/config
+cat ~/.ssh/config | grep ^Host | cut -d\  -f2 | xargs cssh
+```
 
 License
 -------

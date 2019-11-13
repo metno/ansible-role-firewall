@@ -1,4 +1,14 @@
 ---
+- name: set name of iptables service ubuntu < 16
+  set_fact:
+    iptables_service_name: iptables-persistent
+  when: ansible_distribution_version|int < 16
+
+- name: set name of iptables service ubuntu >= 16
+  set_fact:
+    iptables_service_name: netfilter-persistent
+  when: ansible_distribution_version|int >= 16
+
 - name: check if ufw package is installed (on debian)
   shell: dpkg --get-selections ufw | grep install
   args:
@@ -28,12 +38,23 @@
 
 - name: start iptables on boot ubuntu < 16
   service:
-    name: iptables-persistent
+    name: "{{ iptables_service_name }}"
     enabled: "{{ firewall_enable_on_boot }}"
-  when: ansible_distribution_major_version|int < 16
 
-- name: start iptables on boot ubuntu >= 16
+- name: iptables templates
+  template:
+    src: "{{ item.0 }}.j2"
+    dest: "/etc/iptables/{{ item.1 }}"
+    owner: root
+    group: root
+    mode: 0600
+  loop:
+    - - iptables
+      - rules.v4
+    - - ip6tables
+      - rules.v6
+
+- name: reload iptables
   service:
-    name: netfilter-persistent
-    enabled: "{{ firewall_enable_on_boot }}"
-  when: ansible_distribution_major_version|int >= 16
+    name: "{{ iptables_service_name }}"
+    state: restarted
