@@ -3,5 +3,7 @@ firewall_policy_input: ACCEPT
 firewall_policy_forward: ACCEPT
 firewall_policy_output: ACCEPT
 firewall_log_enabled: true
+firewall4_default_raw: |
+  -A fw4-input -p tcp -m tcp --dport 22 -j ACCEPT
 firewall6_default_raw: |
   -A fw6-input -p tcp -m tcp --dport 22 -j ACCEPT
