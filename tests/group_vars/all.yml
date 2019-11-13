@@ -1,6 +1,6 @@
 ---
-firewall_policy_input: ACCEPT
-firewall_policy_forward: ACCEPT
+firewall_policy_input: DROP
+firewall_policy_forward: DROP
 firewall_policy_output: ACCEPT
 firewall_log_enabled: true
 firewall4_default_raw: |
