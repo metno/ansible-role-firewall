@@ -4,7 +4,7 @@ firewall_disable_firewalld: true
 firewall_disable_ufw: true
 firewall_enable_on_boot: true
 
-firewall_policy_input: DROP
+firewall_policy_input: ACCEPT
 firewall_policy_forward: ACCEPT
 firewall_policy_output: ACCEPT
 
@@ -21,3 +21,5 @@ firewall_raw_ipv6: ''
 
 firewall_enable_ipv4_forward: false
 firewall_enable_ipv6_forward: false
+
+firewall_restart_docker: true

@@ -1,8 +1,7 @@
 {{ ansible_managed|comment }}
 
 *filter
-{% if firewall_policy_input in ['ACCEPT', 'DROP'] %}
-:INPUT {{ firewall_policy_input }}
+:INPUT {{ firewall_policy_input if firewall_policy_input in ['ACCEPT', 'DROP'] else 'ACCEPT' }}
 :fw4-before-input -
 :fw4-input -
 :fw4-after-input -
@@ -10,27 +9,22 @@
 -A INPUT -j fw4-before-input
 -A INPUT -j fw4-input
 -A INPUT -j fw4-after-input
-{% endif %}
 
-{% if firewall_policy_forward in ['ACCEPT', 'DROP'] %}
-:FORWARD {{ firewall_policy_forward }}
+:FORWARD {{ firewall_policy_forward if firewall_policy_forward in ['ACCEPT', 'DROP'] else 'ACCEPT' }}
 :fw4-before-forward -
 :fw4-forward -
 :fw4-after-forward -
 -A FORWARD -j fw4-before-forward
 -A FORWARD -j fw4-forward
 -A FORWARD -j fw4-after-forward
-{% endif %}
 
-{% if firewall_policy_output in ['ACCEPT', 'DROP'] %}
-:OUTPUT {{ firewall_policy_output }}
+:OUTPUT {{ firewall_policy_output if firewall_policy_output in ['ACCEPT', 'DROP'] else 'ACCEPT' }}
 :fw4-before-output -
 :fw4-output -
 :fw4-after-output -
 -A OUTPUT -j fw4-before-output
 -A OUTPUT -j fw4-output
 -A OUTPUT -j fw4-after-output
-{% endif %}
 
 {% if firewall_policy_input in ['DROP'] %}
 {% if firewall_log_enabled %}

@@ -12,6 +12,29 @@
 - name: turn off ufw and firewalld
   include: "{{ ansible_os_family | lower }}.yml"
 
+- name: check if dockerd is running
+  command:
+    argv:
+      - service
+      - docker
+      - status
+    warn: false
+  register: docker_running
+  failed_when: false
+  changed_when: false
+  when:
+    - iptables_templates is changed
+    - firewall_restart_docker
+
+- name: restart_dockerd
+  service:
+    name: docker
+    state: restarted
+  when:
+    - iptables_templates is changed
+    - firewall_restart_docker
+    - docker_running.rc == 0
+
 - name: set ipv4 forwarding
   sysctl:
     name: net.ipv4.ip_forward

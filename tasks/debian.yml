@@ -34,6 +34,7 @@
     name:
       - iptables
       - iptables-persistent
+    force_apt_get: true
     update_cache: yes
     cache_valid_time: "{{ 3600 * 3 }}"
 
@@ -49,7 +50,7 @@
     owner: root
     group: root
     mode: 0600
-    validate: bash -c 'cat %s | /sbin/{{ item.0 }}-restore --test'
+    #validate: bash -c 'cat %s | /sbin/{{ item.0 }}-restore --test'
   loop:
     - - iptables
       - rules.v4

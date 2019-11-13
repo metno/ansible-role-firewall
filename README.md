@@ -25,15 +25,15 @@ Role Variables
 
 * `firewall_disable_firewalld` --- disable firewalld on RedHat systems, default `true`.
 * `firewall_disable_ufw` --- disable ufw on Debian based systems, default `true`.
+* `firewall_restart_docker` --- restart docker daemon on firewall change, default `true`.
 * `firewall_enable_on_boot` --- enable firewall on boot, default `true`.
 * `firewall_log_enabled` --- enable firewall logging, default `true`.
 * `firewall_log_level` --- how much to log of dropped packages, default `-m limit --limit 3/min --limit-burst 10`.
 * `firewall_enable_ipv4_forward` --- enable ipv4 forwarding, default `false`
 * `firewall_enable_ipv6_forward` --- enable ipv6 forwarding, default `false`
-* `firewall_policy_input`, `firewall_policy_forward`, `firewall_policy_output` --- set policies for firewall, default `SKIP`.
+* `firewall_policy_input`, `firewall_policy_forward`, `firewall_policy_output` --- set policies for firewall, default `ACCEPT`.
   * `ACCEPT` --- accept all packages.
   * `DROP` --- drop packages silently.
-  * `SKIP` --- do not administrate this chain.
 * `firewall_default_raw_ipv4` --- lines with raw iptables rules, default `'-A fw4-input -p tcp -m tcp --dport 22 -j ACCEPT'`.  
     Use the following chain names, see examples for more context.
     * `fw4-input` --- input chain ipv4, used when `firewall_policy_input` is set to `DROP`
