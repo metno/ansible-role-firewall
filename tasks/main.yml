@@ -11,5 +11,12 @@
 - name: turn off ufw and firewalld
   include: "{{ ansible_os_family | lower }}.yml"
 
+- name: set ipv4 forwarding
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: "{{ 1 if firewall_enable_ipv4_forward else 0 }}"
 
-
+- name: set ipv6 forwarding
+  sysctl:
+    name: net.ipv6.conf.all.forwarding
+    value: "{{ 1 if firewall_enable_ipv6_forward else 0 }}"
