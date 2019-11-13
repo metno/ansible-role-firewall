@@ -1,0 +1,14 @@
+---
+- name: check if we're running supported os
+  assert:
+    fail_msg: "{{ role_name }} only supports ubuntu versions 12, 14, 16, 18 and centos versions 6, 7!"
+    success_msg: "{{ role_name }} supports {{ ansible_distribution }} version {{ ansible_distribution_version }}"
+    quiet: "{{ not ansible_check_mode }}"
+    that:
+      ( ansible_distribution == "Ubuntu" and ansible_distribution_version|int in [12, 14, 16, 18] )
+      or ( ansible_distribution == "CentOS" and ansible_distribution_major_version|int in [6, 7] )
+
+- name: turn off ufw and firewalld
+  include: "{{ ansible_os_family | lower }}.yml"
+
+

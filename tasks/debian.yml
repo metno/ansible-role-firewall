@@ -1,0 +1,39 @@
+---
+- name: check if ufw package is installed (on debian)
+  shell: dpkg --get-selections ufw | grep install
+  args:
+    warn: false
+  register: ufw_installed
+  ignore_errors: true
+  changed_when: false
+  when:
+    - firewall_disable_ufw
+
+- name: disable the ufw firewall (on debian, if configured)
+  service:
+    name: ufw
+    state: stopped
+    enabled: false
+  when:
+    - firewall_disable_ufw
+    - ufw_installed.rc == 0
+
+- name: add persistance for iptables
+  apt:
+    name:
+      - iptables
+      - iptables-persistent
+    update_cache: yes
+    cache_valid_time: "{{ 3600 * 3 }}"
+
+- name: start iptables on boot ubuntu < 16
+  service:
+    name: iptables-persistent
+    enabled: "{{ firewall_enable_on_boot }}"
+  when: ansible_distribution_major_version|int < 16
+
+- name: start iptables on boot ubuntu >= 16
+  service:
+    name: netfilter-persistent
+    enabled: "{{ firewall_enable_on_boot }}"
+  when: ansible_distribution_major_version|int >= 16
