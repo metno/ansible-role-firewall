@@ -3,6 +3,11 @@ firewall
 
 A simple firewall for Linux hosts, based on the common iptables/netfilter commands. This role is inspired by [UFW](https://en.wikipedia.org/wiki/Uncomplicated_Firewall "Uncomplicated Firewall") and [geerlingguy/firewall](https://github.com/geerlingguy/ansible-role-firewall).
 
+Version
+-------
+
+* `master` --- latest development version
+
 Requirements
 ------------
 
@@ -69,6 +74,13 @@ Testing
 ```bash
 cd tests
 vagrant up
+```
+
+### Rerun role
+
+Run role on all OSes again.
+
+```bash
 vagrant provision
 ```
 
