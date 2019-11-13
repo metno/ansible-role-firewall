@@ -1,3 +1,5 @@
+# vim: ai et ts=2 st=2 sw=2 :
+---
 galaxy_info:
   author: Arnulf Heimsbakk
   description: Generic firewall role for Linux

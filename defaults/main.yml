@@ -1,3 +1,4 @@
+# vim: ai et ts=2 st=2 sw=2 :
 ---
 firewall_disable_firewalld: true
 firewall_disable_ufw: true
