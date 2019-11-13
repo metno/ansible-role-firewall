@@ -12,3 +12,21 @@
   include: "{{ ansible_os_family | lower }}.yml"
 
 
+
+# CentOS
+# /usr/libexec/iptables/iptables.init save
+# /usr/libexec/iptables/ip6tables.init save
+
+# /etc/sysconfig/ip6tables
+# /etc/sysconfig/iptables
+
+
+# Ubuntu >= 16
+# /usr/sbin/netfilter-persistent
+# /etc/iptables/rules.v4
+# /etc/iptables/rules.v6
+
+# Ubuntu < 16
+# /etc/init.d/iptables-persistent
+# /etc/iptables/rules.v4
+# /etc/iptables/rules.v6
