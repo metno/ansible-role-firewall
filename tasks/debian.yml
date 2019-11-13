@@ -48,13 +48,16 @@
     owner: root
     group: root
     mode: 0600
+    validate: bash -c 'cat %s | /sbin/{{ item.0 }}-restore --test'
   loop:
     - - iptables
       - rules.v4
     - - ip6tables
       - rules.v6
+  register: iptables_templates
 
 - name: reload iptables
   service:
     name: "{{ iptables_service_name }}"
     state: restarted
+  when: iptables_templates is changed
