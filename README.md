@@ -27,18 +27,18 @@ Role Variables
   * `ACCEPT` --- accept all packages.
   * `DROP` --- drop packages silently.
   * `SKIP` --- do not administrate this chain.
-* `firewall4_default_raw` --- lines with raw iptables rules separated by enter, default `'-A fw4-input -p tcp -m tcp --dport 22 -j ACCEPT'`.  
+* `firewall4_default_raw` --- lines with raw iptables rules, default `'-A fw4-input -p tcp -m tcp --dport 22 -j ACCEPT'`.  
     Use the following chain names, see examples for more context.
     * `fw4-input` --- input chain ipv4, used when `firewall_policy_input` is set to `DROP`
     * `fw4-forward` --- forward chain ipv4, used when `firewall_policy_forward` is set to `DROP`.
     * `fw4-output` --- output chain ipv4, used when `firewall_policy_output` is set to `DROP`.
-* `firewall6_default_raw` --- lines with raw iptables rules separated by enter, default `'-A fw6-input -p tcp -m tcp --dport 22 -j ACCEPT'`.  
+* `firewall6_default_raw` --- lines with raw iptables rules, default `'-A fw6-input -p tcp -m tcp --dport 22 -j ACCEPT'`.  
     Use the following chain names, see examples for more context.
     * `fw6-input` --- input chain ipv4, used when `firewall_policy_input` is set to `DROP`
     * `fw6-forward` --- forward chain ipv4, used when `firewall_policy_forward` is set to `DROP`.
     * `fw6-output` --- output chain ipv4, used when `firewall_policy_output` is set to `DROP`.
-* `firewall4_raw` --- lines with raw iptables rules for ipv4 separated with enter - use same chain names as `firewall4_default_raw`, default `''`.
-* `firewall6_raw` --- lines with raw iptables rules for ipv6 separated with enter - use same chain names as `firewall6_default_raw`, default `''`.
+* `firewall4_raw` --- lines with raw iptables rules - use same chain names as `firewall4_default_raw`, default `''`.
+* `firewall6_raw` --- lines with raw iptables rules - use same chain names as `firewall6_default_raw`, default `''`.
 
 
 Dependencies
