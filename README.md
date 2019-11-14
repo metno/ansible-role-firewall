@@ -6,6 +6,7 @@ A simple firewall for Linux hosts, based on the common iptables/netfilter comman
 Version
 -------
 
+* `1.0.1` --- fix, `ansible-playbook --check` works again
 * `1.0.0` --- initial release
 * `master` --- latest development version
 
