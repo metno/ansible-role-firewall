@@ -26,7 +26,7 @@
     state: stopped
     enabled: false
   when:
-    - "{{ not ansible_check_mode }}"
+    - not ansible_check_mode
     - firewall_disable_ufw
     - ufw_installed.rc == 0
 
@@ -51,7 +51,7 @@
     owner: root
     group: root
     mode: 0600
-    #validate: bash -c 'cat %s | /sbin/{{ item.0 }}-restore --test'
+    validate: bash -c 'cat %s | /sbin/{{ item.0 }}-restore --test'
   loop:
     - - iptables
       - rules.v4
@@ -59,8 +59,21 @@
       - rules.v6
   register: iptables_templates
 
-- name: reload iptables
+- name: load new rules
+  shell: "cat /etc/iptables/{{ item.1 }} | {{ item.0 }}-restore --noflush"
+  loop:
+    - - iptables
+      - rules.v4
+    - - ip6tables
+      - rules.v6
+  when:
+    - iptables_templates is changed
+    - not firewall_flush_on_change
+
+- name: restart iptables
   service:
     name: "{{ iptables_service_name }}"
     state: restarted
-  when: iptables_templates is changed
+  when:
+    - iptables_templates is changed
+    - firewall_flush_on_change

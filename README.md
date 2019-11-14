@@ -6,6 +6,7 @@ A simple firewall for Linux hosts, based on the common iptables/netfilter comman
 Version
 -------
 
+* `2.0.0` --- flush firewall after adding rules only when `firewall_flush_on_change`, else append rules
 * `1.0.1` --- fix, `ansible-playbook --check` works again
 * `1.0.0` --- initial release
 * `master` --- latest development version
@@ -27,7 +28,8 @@ Role Variables
 
 * `firewall_disable_firewalld` --- disable firewalld on RedHat systems, default `true`.
 * `firewall_disable_ufw` --- disable ufw on Debian based systems, default `true`.
-* `firewall_restart_docker` --- restart docker daemon on firewall change, default `true`.
+* `firewall_flush_on_change` --- flush firewall when rules have changed else only apply new rules, default `false`.
+* `firewall_restart_docker` --- restart docker daemon on firewall change, default `false`.
 * `firewall_enable_on_boot` --- enable firewall on boot, default `true`.
 * `firewall_log_enabled` --- enable firewall logging, default `true`.
 * `firewall_log_level` --- how much to log of dropped packages, default `-m limit --limit 3/min --limit-burst 10`.
@@ -69,11 +71,11 @@ Example Playbook
           firewall_log_level: -m limit --limit 3/hour --limit-burst 5
           firewall_default_raw_ipv4: |
             -A fw4-input -p tcp -m tcp --dport 22 -j ACCEPT
-          firewall_raw_ipv4:
+          firewall_raw_ipv4: |
             -A fw4-input -s 10.0.0.0/24 -j ACCEPT
           firewall_default_raw_ipv6: |
             -A fw6-input -p tcp -m tcp --dport 22 -j ACCEPT
-          firewall_raw_ipv6:
+          firewall_raw_ipv6: |
             -A fw6-input  -s fe80::/10 -d fe80::/10 -p udp -m udp --sport 547 --dport 546 -j ACCEPT
 
 Testing
