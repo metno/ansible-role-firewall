@@ -6,6 +6,7 @@ A simple firewall for Linux hosts, based on the common iptables/netfilter comman
 Version
 -------
 
+* `3.0.1` --- check if docker is running if `check_mode == true`
 * `3.0.0` --- handle docker if docker is running, user `DOCKER-USER` chain instead of forward
 * `2.0.0` --- flush firewall after adding rules only when `firewall_flush_on_change`, else append rules
 * `1.0.1` --- fix, `ansible-playbook --check` works again

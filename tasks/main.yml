@@ -19,6 +19,7 @@
   register: docker_running
   failed_when: false
   changed_when: false
+  check_mode: false
 
 - name: set variable if docker is running
   set_fact:
