@@ -47,6 +47,22 @@
     - iptables
     - ip6tables
   register: iptables_templates
+  when:
+    - not is_docker
+
+- name: iptables templates for docker hosts
+  template:
+    src: "{{ item }}.j2-docker"
+    dest: "/etc/sysconfig/{{ item }}"
+    owner: root
+    group: root
+    mode: 0600
+    validate: bash -c 'cat %s | /sbin/{{ item }}-restore --test'
+  loop:
+    - iptables
+    - ip6tables
+  register: iptables_templates_docker
+  when: is_docker
 
 - name: load new rules
   shell: "cat /etc/sysconfig/{{ item }} | {{ item }}-restore --noflush"
@@ -54,7 +70,7 @@
     - iptables
     - ip6tables
   when:
-    - iptables_templates is changed
+    - iptables_templates is changed or iptables_templates_docker is changed
     - not firewall_flush_on_change
 
 - name: restart iptables
@@ -65,5 +81,5 @@
     - iptables
     - ip6tables
   when:
-    - iptables_templates is changed
+    - iptables_templates is changed or iptables_templates_docker is changed
     - firewall_flush_on_change

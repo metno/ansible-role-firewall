@@ -13,17 +13,18 @@
 -A INPUT -j fw6-input
 -A INPUT -j fw6-after-input
 
-:FORWARD {{ firewall_policy_forward if firewall_policy_forward in ['ACCEPT', 'DROP'] else 'ACCEPT' }}
+:DOCKER-USER -
 :fw6-before-forward -
 :fw6-forward -
 :fw6-after-forward -
--F FORWARD
+-F DOCKER-USER
 -F fw6-before-forward
 -F fw6-forward
 -F fw6-after-forward
--A FORWARD -j fw6-before-forward
--A FORWARD -j fw6-forward
--A FORWARD -j fw6-after-forward
+-A DOCKER-USER -j fw6-before-forward
+-A DOCKER-USER -j fw6-forward
+-A DOCKER-USER -j fw6-after-forward
+-A DOCKER-USER -j RETURN
 
 
 :OUTPUT {{ firewall_policy_output if firewall_policy_output in ['ACCEPT', 'DROP'] else 'ACCEPT' }}
@@ -92,7 +93,7 @@
 
 {% if firewall_policy_forward in ['ACCEPT', 'DROP'] %}
 #
-# FORWARD RULES
+# DOCKER-USER RULES
 #
 
 {% if firewall_policy_forward in ['DROP'] %}
@@ -107,7 +108,7 @@
 
 {% if firewall_policy_forward in ['DROP']  %}
 {% if firewall_log_enabled %}
--A fw6-after-forward {{ firewall_log_level }} -j LOG --log-prefix "[IPTABLES BLOCK FORWARD] "
+-A fw6-after-forward {{ firewall_log_level }} -j LOG --log-prefix "[IPTABLES BLOCK DOCKER-USER] "
 {% endif %}
 {% endif %}
 {% endif %}

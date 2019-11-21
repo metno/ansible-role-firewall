@@ -6,6 +6,7 @@ A simple firewall for Linux hosts, based on the common iptables/netfilter comman
 Version
 -------
 
+* `3.0.0` --- handle docker if docker is running, user `DOCKER-USER` chain instead of forward
 * `2.0.0` --- flush firewall after adding rules only when `firewall_flush_on_change`, else append rules
 * `1.0.1` --- fix, `ansible-playbook --check` works again
 * `1.0.0` --- initial release
@@ -29,7 +30,6 @@ Role Variables
 * `firewall_disable_firewalld` --- disable firewalld on RedHat systems, default `true`.
 * `firewall_disable_ufw` --- disable ufw on Debian based systems, default `true`.
 * `firewall_flush_on_change` --- flush firewall when rules have changed else only apply new rules, default `false`.
-* `firewall_restart_docker` --- restart docker daemon on firewall change, default `false`.
 * `firewall_enable_on_boot` --- enable firewall on boot, default `true`.
 * `firewall_log_enabled` --- enable firewall logging, default `true`.
 * `firewall_log_level` --- how much to log of dropped packages, default `-m limit --limit 3/min --limit-burst 10`.

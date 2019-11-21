@@ -15,17 +15,18 @@
 -A INPUT -j fw4-after-input
 
 
-:FORWARD {{ firewall_policy_forward if firewall_policy_forward in ['ACCEPT', 'DROP'] else 'ACCEPT' }}
+:DOCKER-USER -
 :fw4-before-forward -
 :fw4-forward -
 :fw4-after-forward -
--F FORWARD
+-F DOCKER-USER
 -F fw4-before-forward
 -F fw4-forward
 -F fw4-after-forward
--A FORWARD -j fw4-before-forward
--A FORWARD -j fw4-forward
--A FORWARD -j fw4-after-forward
+-A DOCKER-USER -j fw4-before-forward
+-A DOCKER-USER -j fw4-forward
+-A DOCKER-USER -j fw4-after-forward
+-A DOCKER-USER -j RETURN
 
 :OUTPUT {{ firewall_policy_output if firewall_policy_output in ['ACCEPT', 'DROP'] else 'ACCEPT' }}
 :fw4-before-output -
@@ -84,7 +85,7 @@
 
 {% if firewall_policy_forward in ['ACCEPT', 'DROP'] %}
 #
-# FORWARD RULES
+# DOCKER RULES
 #
 
 {% if firewall_policy_forward in ['DROP'] %}
@@ -98,7 +99,7 @@
 
 {% if firewall_policy_forward in ['DROP']  %}
 {% if firewall_log_enabled %}
--A fw4-after-forward {{ firewall_log_level }} -j LOG --log-prefix "[IPTABLES BLOCK FORWARD] "
+-A fw4-after-forward {{ firewall_log_level }} -j LOG --log-prefix "[IPTABLES BLOCK DOCKER-USER] "
 {% endif %}
 {% endif %}
 {% endif %}

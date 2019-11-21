@@ -22,5 +22,4 @@ firewall_raw_ipv6: ''
 firewall_enable_ipv4_forward: false
 firewall_enable_ipv6_forward: false
 
-firewall_restart_docker: false
 firewall_flush_on_change: false

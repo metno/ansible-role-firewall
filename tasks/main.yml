@@ -9,9 +9,6 @@
       ( ansible_distribution == "Ubuntu" and ansible_distribution_version|int in [12, 14, 16, 18] )
       or ( ansible_distribution == "CentOS" and ansible_distribution_major_version|int in [6, 7] )
 
-- name: turn off ufw and firewalld
-  include: "{{ ansible_os_family | lower }}.yml"
-
 - name: check if dockerd is running
   command:
     argv:
@@ -22,18 +19,13 @@
   register: docker_running
   failed_when: false
   changed_when: false
-  when:
-    - iptables_templates is changed
-    - firewall_restart_docker
 
-- name: restart_dockerd
-  service:
-    name: docker
-    state: restarted
-  when:
-    - iptables_templates is changed
-    - firewall_restart_docker
-    - docker_running.rc == 0
+- name: set variable if docker is running
+  set_fact:
+    is_docker: "{{ docker_running.rc == 0 }}"
+
+- name: turn off ufw and firewalld
+  include: "{{ ansible_os_family | lower }}.yml"
 
 - name: set ipv4 forwarding
   sysctl:
