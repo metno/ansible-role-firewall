@@ -65,7 +65,9 @@
   when: is_docker
 
 - name: load new rules
-  shell: "cat /etc/sysconfig/{{ item }} | {{ item }}-restore --noflush"
+  shell: "set -o pipefail && cat /etc/sysconfig/{{ item }} | {{ item }}-restore --noflush"
+  args:
+    executable: bash
   loop:
     - iptables
     - ip6tables

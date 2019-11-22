@@ -78,7 +78,9 @@
   when: is_docker
 
 - name: load new rules
-  shell: "cat /etc/iptables/{{ item.1 }} | {{ item.0 }}-restore --noflush"
+  shell: "set -o pipefail && cat /etc/iptables/{{ item.1 }} | {{ item.0 }}-restore --noflush"
+  args:
+    executable: bash
   loop:
     - - iptables
       - rules.v4
