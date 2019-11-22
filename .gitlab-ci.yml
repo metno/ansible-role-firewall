@@ -19,4 +19,4 @@ ansible-lint:
     changes:
       - "*yml"
   tags:
-    - ansible
+    - dind
