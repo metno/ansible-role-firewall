@@ -1,10 +1,10 @@
 {{ ansible_managed|comment }}
 
 *filter
-:INPUT {{ firewall_policy_input if firewall_policy_input in ['ACCEPT', 'DROP'] else 'ACCEPT' }}
-:fw6-before-input -
-:fw6-input -
-:fw6-after-input -
+:INPUT {{ firewall_policy_input if firewall_policy_input in ['ACCEPT', 'DROP'] else 'ACCEPT' }} [0:0]
+:fw6-before-input - [0:0]
+:fw6-input - [0:0]
+:fw6-after-input - [0:0]
 -F INPUT
 -F fw6-before-input
 -F fw6-input
@@ -13,10 +13,10 @@
 -A INPUT -j fw6-input
 -A INPUT -j fw6-after-input
 
-:FORWARD {{ firewall_policy_forward if firewall_policy_forward in ['ACCEPT', 'DROP'] else 'ACCEPT' }}
-:fw6-before-forward -
-:fw6-forward -
-:fw6-after-forward -
+:FORWARD {{ firewall_policy_forward if firewall_policy_forward in ['ACCEPT', 'DROP'] else 'ACCEPT' }} [0:0]
+:fw6-before-forward - [0:0]
+:fw6-forward - [0:0]
+:fw6-after-forward - [0:0]
 -F FORWARD
 -F fw6-before-forward
 -F fw6-forward
@@ -26,10 +26,10 @@
 -A FORWARD -j fw6-after-forward
 
 
-:OUTPUT {{ firewall_policy_output if firewall_policy_output in ['ACCEPT', 'DROP'] else 'ACCEPT' }}
-:fw6-before-output -
-:fw6-output -
-:fw6-after-output -
+:OUTPUT {{ firewall_policy_output if firewall_policy_output in ['ACCEPT', 'DROP'] else 'ACCEPT' }} [0:0]
+:fw6-before-output - [0:0]
+:fw6-output - [0:0]
+:fw6-after-output - [0:0]
 -F OUTPUT
 -F fw6-before-output
 -F fw6-output
