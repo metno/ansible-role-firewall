@@ -6,6 +6,7 @@ A simple firewall for Linux hosts, based on the common iptables/netfilter comman
 Version
 -------
 
+* `3.1.0` --- firewall for  openstack neutron nodes, set `firewall_is_neutron` to `true`
 * `3.0.2` --- satisfy lint, use pipefail when reading in new firewalls
 * `3.0.1` --- check if docker is running if `check_mode == true`
 * `3.0.0` --- handle docker if docker is running, user `DOCKER-USER` chain instead of forward
@@ -31,6 +32,7 @@ Role Variables
 
 * `firewall_disable_firewalld` --- disable firewalld on RedHat systems, default `true`.
 * `firewall_disable_ufw` --- disable ufw on Debian based systems, default `true`.
+* `firewall_is_neutron` --- is this an openstack neutron node, default `false`.
 * `firewall_flush_on_change` --- flush firewall when rules have changed else only apply new rules, default `false`.
 * `firewall_enable_on_boot` --- enable firewall on boot, default `true`.
 * `firewall_log_enabled` --- enable firewall logging, default `true`.

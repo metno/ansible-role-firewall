@@ -23,3 +23,4 @@ firewall_enable_ipv4_forward: false
 firewall_enable_ipv6_forward: false
 
 firewall_flush_on_change: false
+firewall_is_neutron: false

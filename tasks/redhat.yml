@@ -49,6 +49,7 @@
   register: iptables_templates
   when:
     - not is_docker
+    - not firewall_is_neutron
 
 - name: iptables templates for docker hosts
   template:
@@ -63,6 +64,20 @@
     - ip6tables
   register: iptables_templates_docker
   when: is_docker
+
+- name: iptables templates for neutron hosts
+  template:
+    src: "{{ item }}.j2-neutron"
+    dest: "/etc/sysconfig/{{ item }}"
+    owner: root
+    group: root
+    mode: 0600
+    validate: bash -c 'cat %s | /sbin/{{ item }}-restore --test'
+  loop:
+    - iptables
+    - ip6tables
+  register: iptables_templates_docker
+  when: firewall_is_neutron
 
 - name: load new rules
   shell: "set -o pipefail && cat /etc/sysconfig/{{ item }} | {{ item }}-restore --noflush"
