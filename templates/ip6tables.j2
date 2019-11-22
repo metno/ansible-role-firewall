@@ -25,7 +25,6 @@
 -A FORWARD -j fw6-forward
 -A FORWARD -j fw6-after-forward
 
-
 :OUTPUT {{ firewall_policy_output if firewall_policy_output in ['ACCEPT', 'DROP'] else 'ACCEPT' }} [0:0]
 :fw6-before-output - [0:0]
 :fw6-output - [0:0]

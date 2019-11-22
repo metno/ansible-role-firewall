@@ -14,7 +14,6 @@
 -A INPUT -j fw4-input
 -A INPUT -j fw4-after-input
 
-
 :FORWARD {{ firewall_policy_forward if firewall_policy_forward in ['ACCEPT', 'DROP'] else 'ACCEPT' }} [0:0]
 :fw4-before-forward - [0:0]
 :fw4-forward - [0:0]

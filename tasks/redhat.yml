@@ -76,7 +76,7 @@
   loop:
     - iptables
     - ip6tables
-  register: iptables_templates_docker
+  register: iptables_templates_neutron
   when: firewall_is_neutron
 
 - name: load new rules
@@ -87,8 +87,21 @@
     - iptables
     - ip6tables
   when:
-    - iptables_templates is changed or iptables_templates_docker is changed
+    - iptables_templates is changed or iptables_templates_docker is changed or iptables_templates_neutron is changed
     - not firewall_flush_on_change
+    - not is_neutron_loaded
+
+- name: load new rules when neutron is loaded
+  shell: "set -o pipefail && cat /etc/sysconfig/{{ item }} | sed 's/^:neutron.*$//g' | {{ item }}-restore --noflush"
+  args:
+    executable: bash
+  loop:
+    - iptables
+    - ip6tables
+  when:
+    - iptables_templates_neutron is changed
+    - not firewall_flush_on_change
+    - is_neutron_loaded
 
 - name: restart iptables
   service:
@@ -98,5 +111,5 @@
     - iptables
     - ip6tables
   when:
-    - iptables_templates is changed or iptables_templates_docker is changed
+    - iptables_templates is changed or iptables_templates_docker is changed or iptables_templates_neutron is changed
     - firewall_flush_on_change

@@ -11,6 +11,7 @@
       firewall_enable_ipv4_forward: true
       firewall_enable_ipv6_forward: false
       firewall_log_enabled: true
+      firewall_is_neutron: true
       firewall_log_level: -m limit --limit 3/hour --limit-burst 5
       firewall_default_raw_ipv4: |
         -A fw4-input -p tcp -m tcp --dport 22 -j ACCEPT
