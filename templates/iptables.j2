@@ -1,11 +1,11 @@
 {{ ansible_managed|comment }}
 
 *filter
-:INPUT {{ firewall_policy_input if firewall_policy_input in ['ACCEPT', 'DROP'] else 'ACCEPT' }}
-:fw4-before-input -
-:fw4-input -
-:fw4-after-input -
-:fw4-not-local -
+:INPUT {{ firewall_policy_input if firewall_policy_input in ['ACCEPT', 'DROP'] else 'ACCEPT' }} [0:0]
+:fw4-before-input - [0:0]
+:fw4-input - [0:0]
+:fw4-after-input - [0:0]
+:fw4-not-local - [0:0]
 -F INPUT
 -F fw4-before-input
 -F fw4-input
@@ -15,10 +15,10 @@
 -A INPUT -j fw4-after-input
 
 
-:FORWARD {{ firewall_policy_forward if firewall_policy_forward in ['ACCEPT', 'DROP'] else 'ACCEPT' }}
-:fw4-before-forward -
-:fw4-forward -
-:fw4-after-forward -
+:FORWARD {{ firewall_policy_forward if firewall_policy_forward in ['ACCEPT', 'DROP'] else 'ACCEPT' }} [0:0]
+:fw4-before-forward - [0:0]
+:fw4-forward - [0:0]
+:fw4-after-forward - [0:0]
 -F FORWARD
 -F fw4-before-forward
 -F fw4-forward
@@ -27,10 +27,10 @@
 -A FORWARD -j fw4-forward
 -A FORWARD -j fw4-after-forward
 
-:OUTPUT {{ firewall_policy_output if firewall_policy_output in ['ACCEPT', 'DROP'] else 'ACCEPT' }}
-:fw4-before-output -
-:fw4-output -
-:fw4-after-output -
+:OUTPUT {{ firewall_policy_output if firewall_policy_output in ['ACCEPT', 'DROP'] else 'ACCEPT' }} [0:0]
+:fw4-before-output - [0:0]
+:fw4-output - [0:0]
+:fw4-after-output - [0:0]
 -F OUTPUT
 -F fw4-before-output
 -F fw4-output
