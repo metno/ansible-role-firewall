@@ -7,7 +7,7 @@
     quiet: "{{ not ansible_check_mode }}"
     that:
       ( ansible_distribution == "Ubuntu" and ansible_distribution_version|int in [12, 14, 16, 18] )
-      or ( ansible_distribution == "CentOS" and ansible_distribution_major_version|int in [6, 7] )
+      or ( ansible_distribution == "CentOS" and ansible_distribution_major_version|int in [6, 7, 8] )
 
 - name: check if dockerd is running
   command:
@@ -24,7 +24,6 @@
 - name: set variable if docker is running
   set_fact:
     is_docker: "{{ docker_running.rc == 0 }}"
-
 
 - name: check if neutron is loaded
   shell: "set -o pipefail && iptables-save | grep ':neutron'"

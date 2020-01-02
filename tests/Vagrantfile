@@ -8,12 +8,13 @@ Vagrant.configure("2") do |config|
     { :name => "xenial", :box => "ubuntu/xenial64" },
     { :name => "trusty", :box => "ubuntu/trusty64" },
     { :name => "precise", :box => "ubuntu/precise64" },
+    { :name => "centos8", :box => "centos/8" },
     { :name => "centos7", :box => "centos/7" },
     { :name => "centos6", :box => "centos/6" },
   ]
   boxes.each do |opts|
     config.vm.provider "virtualbox" do |vb|
-      vb.memory = "512"
+      vb.memory = "1024"
       vb.cpus = 2
     end
     config.vm.define opts[:name] do |config|

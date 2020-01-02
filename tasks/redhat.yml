@@ -30,6 +30,14 @@
       - iptables-services
   when: ansible_distribution_major_version|int == 7
 
+- name: install iptables centos 8
+  dnf:
+    name:
+      - python3-libselinux
+      - iptables
+      - iptables-services
+  when: ansible_distribution_major_version|int == 8
+
 - name: enable firewall on boot
   service:
     name: iptables

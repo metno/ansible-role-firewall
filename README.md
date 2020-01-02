@@ -6,6 +6,7 @@ A simple firewall for Linux hosts, based on the common iptables/netfilter comman
 Version
 -------
 
+* `3.1.1` --- updated for CentOS 8
 * `3.1.0` --- firewall for  openstack neutron nodes, set `firewall_is_neutron` to `true`
 * `3.0.2` --- satisfy lint, use pipefail when reading in new firewalls
 * `3.0.1` --- check if docker is running if `check_mode == true`
@@ -24,36 +25,37 @@ This role is limited to
 * Ubuntu 16.04 - Xenial
 * Ubuntu 14.04 - Trusty
 * Ubuntu 12.04 - Precise
+* CentOS 8
 * CentOS 7
 * CentOS 6
 
 Role Variables
 --------------
 
-* `firewall_disable_firewalld` --- disable firewalld on RedHat systems, default `true`.
-* `firewall_disable_ufw` --- disable ufw on Debian based systems, default `true`.
-* `firewall_is_neutron` --- is this an openstack neutron node, default `false`.
-* `firewall_flush_on_change` --- flush firewall when rules have changed else only apply new rules, default `false`.
-* `firewall_enable_on_boot` --- enable firewall on boot, default `true`.
-* `firewall_log_enabled` --- enable firewall logging, default `true`.
-* `firewall_log_level` --- how much to log of dropped packages, default `-m limit --limit 3/min --limit-burst 10`.
+* `firewall_disable_firewalld` --- disable firewalld on RedHat systems, default `true`
+* `firewall_disable_ufw` --- disable ufw on Debian based systems, default `true`
+* `firewall_is_neutron` --- is this an openstack neutron node, default `false`
+* `firewall_flush_on_change` --- flush firewall when rules have changed else only apply new rules, default `false`
+* `firewall_enable_on_boot` --- enable firewall on boot, default `true`
+* `firewall_log_enabled` --- enable firewall logging, default `true`
+* `firewall_log_level` --- how much to log of dropped packages, default `-m limit --limit 3/min --limit-burst 10`
 * `firewall_enable_ipv4_forward` --- enable ipv4 forwarding, default `false`
 * `firewall_enable_ipv6_forward` --- enable ipv6 forwarding, default `false`
-* `firewall_policy_input`, `firewall_policy_forward`, `firewall_policy_output` --- set policies for firewall, default `ACCEPT`.
-  * `ACCEPT` --- accept all packages.
-  * `DROP` --- drop packages silently.
-* `firewall_default_raw_ipv4` --- lines with raw iptables rules, default `'-A fw4-input -p tcp -m tcp --dport 22 -j ACCEPT'`.  
-    Use the following chain names, see examples for more context.
+* `firewall_policy_input`, `firewall_policy_forward`, `firewall_policy_output` --- set policies for firewall, default `ACCEPT`
+  * `ACCEPT` --- accept all packages
+  * `DROP` --- drop packages silently
+* `firewall_default_raw_ipv4` --- lines with raw iptables rules, default `'-A fw4-input -p tcp -m tcp --dport 22 -j ACCEPT'`  
+    Use the following chain names, see examples for more context
     * `fw4-input` --- input chain ipv4, used when `firewall_policy_input` is set to `DROP`
-    * `fw4-forward` --- forward chain ipv4, used when `firewall_policy_forward` is set to `DROP`.
-    * `fw4-output` --- output chain ipv4, used when `firewall_policy_output` is set to `DROP`.
-* `firewall_default_raw_ipv6` --- lines with raw iptables rules, default `'-A fw6-input -p tcp -m tcp --dport 22 -j ACCEPT'`.  
-    Use the following chain names, see examples for more context.
+    * `fw4-forward` --- forward chain ipv4, used when `firewall_policy_forward` is set to `DROP`
+    * `fw4-output` --- output chain ipv4, used when `firewall_policy_output` is set to `DROP`
+* `firewall_default_raw_ipv6` --- lines with raw iptables rules, default `'-A fw6-input -p tcp -m tcp --dport 22 -j ACCEPT'`  
+    Use the following chain names, see examples for more context
     * `fw6-input` --- input chain ipv4, used when `firewall_policy_input` is set to `DROP`
-    * `fw6-forward` --- forward chain ipv4, used when `firewall_policy_forward` is set to `DROP`.
-    * `fw6-output` --- output chain ipv4, used when `firewall_policy_output` is set to `DROP`.
-* `firewall_raw_ipv4` --- additional lines with raw iptables rules - use same chain names as `firewall_default_raw_ipv4`, default `''`.
-* `firewall_raw_ipv6` --- additional lines with raw iptables rules - use same chain names as `firewall_default_raw_ipv6`, default `''`.
+    * `fw6-forward` --- forward chain ipv4, used when `firewall_policy_forward` is set to `DROP`
+    * `fw6-output` --- output chain ipv4, used when `firewall_policy_output` is set to `DROP`
+* `firewall_raw_ipv4` --- additional lines with raw iptables rules - use same chain names as `firewall_default_raw_ipv4`, default `''`
+* `firewall_raw_ipv6` --- additional lines with raw iptables rules - use same chain names as `firewall_default_raw_ipv6`, default `''`
 
 Dependencies
 ------------
