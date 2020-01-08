@@ -6,6 +6,7 @@ A simple firewall for Linux hosts, based on the common iptables/netfilter comman
 Version
 -------
 
+* `3.1.2` --- install dependencies for check mode in check mode for centos
 * `3.1.1` --- updated for CentOS 8
 * `3.1.0` --- firewall for  openstack neutron nodes, set `firewall_is_neutron` to `true`
 * `3.0.2` --- satisfy lint, use pipefail when reading in new firewalls
