@@ -62,7 +62,11 @@
 -A fw6-before-input -p ipv6-icmp -m icmp6 --icmpv6-type 2 -j ACCEPT
 -A fw6-before-input -p ipv6-icmp -m icmp6 --icmpv6-type 3 -j ACCEPT
 -A fw6-before-input -p ipv6-icmp -m icmp6 --icmpv6-type 4 -j ACCEPT
+{% if firewall_echo_request_from_ipv6 is defined %}
+-A fw6-before-input -s {{ firewall_echo_request_from_ipv6 }} -p ipv6-icmp -m icmp6 --icmpv6-type 128 -j ACCEPT
+{% else %}
 -A fw6-before-input -p ipv6-icmp -m icmp6 --icmpv6-type 128 -j ACCEPT
+{% endif %}
 -A fw6-before-input -p ipv6-icmp -m icmp6 --icmpv6-type 129 -j ACCEPT
 -A fw6-before-input -p ipv6-icmp -m icmp6 --icmpv6-type 133 -m hl --hl-eq 255 -j ACCEPT
 -A fw6-before-input -p ipv6-icmp -m icmp6 --icmpv6-type 134 -m hl --hl-eq 255 -j ACCEPT
@@ -72,8 +76,6 @@
 -A fw6-before-input -p ipv6-icmp -m icmp6 --icmpv6-type 142 -m hl --hl-eq 255 -j ACCEPT
 -A fw6-before-input -p ipv6-icmp -m icmp6 --icmpv6-type 148 -m hl --hl-eq 255 -j ACCEPT
 -A fw6-before-input -p ipv6-icmp -m icmp6 --icmpv6-type 149 -m hl --hl-eq 255 -j ACCEPT
--A fw6-before-input -p ipv6-icmp -m icmp6 --icmpv6-type 128 -j ACCEPT
--A fw6-before-input -p ipv6-icmp -m icmp6 --icmpv6-type 129 -j ACCEPT
 -A fw6-before-input -p ipv6-icmp -m icmp6 --icmpv6-type 144 -j ACCEPT
 -A fw6-before-input -p ipv6-icmp -m icmp6 --icmpv6-type 145 -j ACCEPT
 -A fw6-before-input -p ipv6-icmp -m icmp6 --icmpv6-type 146 -j ACCEPT
@@ -100,7 +102,11 @@
 -A fw6-before-forward -p ipv6-icmp -m icmp6 --icmpv6-type 2 -j ACCEPT
 -A fw6-before-forward -p ipv6-icmp -m icmp6 --icmpv6-type 3 -j ACCEPT
 -A fw6-before-forward -p ipv6-icmp -m icmp6 --icmpv6-type 4 -j ACCEPT
+{% if firewall_echo_request_from_ipv6 is defined %}
+-A fw6-before-forward -s {{ firewall_echo_request_from_ipv6 }} -p ipv6-icmp -m icmp6 --icmpv6-type 128 -j ACCEPT
+{% else %}
 -A fw6-before-forward -p ipv6-icmp -m icmp6 --icmpv6-type 128 -j ACCEPT
+{% endif %}
 -A fw6-before-forward -p ipv6-icmp -m icmp6 --icmpv6-type 129 -j ACCEPT
 {% endif %}
 

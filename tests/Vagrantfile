@@ -12,6 +12,7 @@ Vagrant.configure("2") do |config|
     { :name => "centos7", :box => "centos/7" },
     { :name => "centos6", :box => "centos/6" },
   ]
+  last_octet = 10
   boxes.each do |opts|
     config.vm.provider "virtualbox" do |vb|
       vb.memory = "1024"
@@ -19,6 +20,8 @@ Vagrant.configure("2") do |config|
     end
     config.vm.define opts[:name] do |config|
       config.vm.box = opts[:box]
+      config.vm.network "private_network", ip: "10.10.10.#{last_octet}"
+      last_octet += 1
       if opts[:name] == boxes.last[:name]
         config.vm.provision "ansible" do |ansible|
           ansible.compatibility_mode = "2.0"

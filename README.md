@@ -6,6 +6,7 @@ A simple firewall for Linux hosts, based on the common iptables/netfilter comman
 Version
 -------
 
+* `3.2.0` --- added option to limit ping with `firewall_echo_request_from_ipv4` and `firewall_echo_request_from_ipv6`
 * `3.1.2` --- install dependencies for check mode in check mode for centos
 * `3.1.1` --- updated for CentOS 8
 * `3.1.0` --- firewall for  openstack neutron nodes, set `firewall_is_neutron` to `true`
@@ -57,6 +58,8 @@ Role Variables
     * `fw6-output` --- output chain ipv4, used when `firewall_policy_output` is set to `DROP`
 * `firewall_raw_ipv4` --- additional lines with raw iptables rules - use same chain names as `firewall_default_raw_ipv4`, default `''`
 * `firewall_raw_ipv6` --- additional lines with raw iptables rules - use same chain names as `firewall_default_raw_ipv6`, default `''`
+* `firewall_echo_request_from_ipv4` --- comma separated string with addresses/nets to allow ICMP echo request from, default not defined
+* `firewall_echo_request_from_ipv6` --- comma separated string with addresses/nets to allow ICMP6 echo request from, default not defined
 
 Dependencies
 ------------
@@ -75,6 +78,9 @@ Example Playbook
           firewall_enable_ipv4_forward: true
           firewall_enable_ipv6_forward: false
           firewall_log_enabled: true
+          # disable external ping
+          firewall_echo_request_from_ipv4: 127.0.0.1
+          firewall_echo_request_from_ipv6: ::1/128
           firewall_log_level: -m limit --limit 3/hour --limit-burst 5
           firewall_default_raw_ipv4: |
             -A fw4-input -p tcp -m tcp --dport 22 -j ACCEPT

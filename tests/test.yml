@@ -13,6 +13,8 @@
       firewall_log_enabled: true
       firewall_is_neutron: true
       firewall_log_level: -m limit --limit 3/hour --limit-burst 5
+      firewall_echo_request_from_ipv4: 127.0.0.1
+      firewall_echo_request_from_ipv6: ::1/128
       firewall_default_raw_ipv4: |
         -A fw4-input -p tcp -m tcp --dport 22 -j ACCEPT
         #-A fw4-input -p tcp -m tcp --dport 23 -j ACCEPT
