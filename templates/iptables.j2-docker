@@ -55,7 +55,7 @@
 -A fw4-before-input -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 {% if firewall_policy_input in ['DROP']  %}
 {% if firewall_log_enabled %}
--A fw4-before-input -m conntrack --ctstate INVALID -j fw4-log-deny
+-A fw4-before-input -m conntrack --ctstate INVALID {{ firewall_log_level }} -j LOG --log-prefix "[IPT BLOCK INVALID] "
 {% endif %}
 -A fw4-before-input -m conntrack --ctstate INVALID -j {{ firewall_policy_input }}
 {% endif %}
@@ -81,7 +81,7 @@
 
 {% if firewall_policy_input in ['DROP']  %}
 {% if firewall_log_enabled %}
--A fw4-after-input {{ firewall_log_level }} -j LOG --log-prefix "[IPTABLES BLOCK INPUT] "
+-A fw4-after-input {{ firewall_log_level }} -j LOG --log-prefix "[IPT BLOCK INPUT] "
 {% endif %}
 {% endif %}
 {% endif %}
@@ -106,7 +106,7 @@
 
 {% if firewall_policy_forward in ['DROP']  %}
 {% if firewall_log_enabled %}
--A fw4-after-forward {{ firewall_log_level }} -j LOG --log-prefix "[IPTABLES BLOCK DOCKER-USER] "
+-A fw4-after-forward {{ firewall_log_level }} -j LOG --log-prefix "[IPT BLOCK DOCKER-USER] "
 {% endif %}
 {% endif %}
 {% endif %}
@@ -123,7 +123,7 @@
 
 {% if firewall_policy_output in ['DROP']  %}
 {% if firewall_log_enabled %}
--A fw4-after-output {{ firewall_log_level }} -j LOG --log-prefix "[IPTABLES BLOCK OUTPUT] "
+-A fw4-after-output {{ firewall_log_level }} -j LOG --log-prefix "[IPT BLOCK OUTPUT] "
 {% endif %}
 {% endif %}
 {% endif %}
@@ -134,7 +134,7 @@
 # LOGGING
 #
 
--A fw4-log-deny {{ firewall_log_level }} -j LOG --log-prefix "[IPTABLES BLOCK INPUT] "
+-A fw4-log-deny {{ firewall_log_level }} -j LOG --log-prefix "[IPT BLOCK INPUT] "
 {% endif %}
 {% endif %}
 
