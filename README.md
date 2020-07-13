@@ -122,7 +122,7 @@ cat ~/.ssh/config | grep ^Host | cut -d\  -f2 | xargs cssh
 License
 -------
 
-MIT / BSD
+GPLv2
 
 Author Information
 ------------------
