@@ -6,6 +6,7 @@ A simple firewall for Linux hosts, based on the common iptables/netfilter comman
 Version
 -------
 
+* `3.4.0` --- added ubuntu focal, 20.04
 * `3.3.2` --- tested with Ansible 2.9.11
 * `3.3.1` --- bump, prepare for github
 * `3.3.0` --- log invalid packages as IPT BLOCK INVALID, renamed IPTABLES in log to IPT
@@ -26,6 +27,7 @@ Requirements
 
 This role is limited to
 
+* Ubuntu 20.04 - Focal
 * Ubuntu 18.04 - Bionic
 * Ubuntu 16.04 - Xenial
 * Ubuntu 14.04 - Trusty
