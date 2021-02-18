@@ -5,7 +5,7 @@ A simple firewall for Linux hosts, based on the common iptables/netfilter comman
 
 Version
 -------
-
+* `3.6.0` --- add support for raw table for openstack neutron
 * `3.5.0` --- remove ubuntu precise from testing
 * `3.4.0` --- added ubuntu focal, 20.04
 * `3.3.2` --- tested with Ansible 2.9.11
@@ -63,6 +63,7 @@ Role Variables
     * `fw6-output` --- output chain ipv4, used when `firewall_policy_output` is set to `DROP`
 * `firewall_raw_ipv4` --- additional lines with raw iptables rules - use same chain names as `firewall_default_raw_ipv4`, default `''`
 * `firewall_raw_ipv6` --- additional lines with raw iptables rules - use same chain names as `firewall_default_raw_ipv6`, default `''`
+* `firewall_raw_table_ipv4` --- define rules for the raw table (this is executed before any other IP tables), default `''`
 * `firewall_echo_request_from_ipv4` --- comma separated string with addresses/nets to allow ICMP echo request from, default not defined
 * `firewall_echo_request_from_ipv6` --- comma separated string with addresses/nets to allow ICMP6 echo request from, default not defined
 
@@ -95,6 +96,8 @@ Example Playbook
             -A fw6-input -p tcp -m tcp --dport 22 -j ACCEPT
           firewall_raw_ipv6: |
             -A fw6-input  -s fe80::/10 -d fe80::/10 -p udp -m udp --sport 547 --dport 546 -j ACCEPT
+          firewall_raw_table_ipv4: |
+		    -A PREROUTING ! -s 10.0.0.0/28 -p tcp -m tcp --dport 443 -j DROP
 
 Testing
 -------

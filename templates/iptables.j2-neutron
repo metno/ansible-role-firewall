@@ -155,3 +155,22 @@
 
 COMMIT
 
+*raw
+:PREROUTING ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+:fw4-before-neutron - [0:0]
+:neutron-openvswi-OUTPUT - [0:0]
+:neutron-openvswi-PREROUTING - [0:0]
+-F PREROUTING
+-F fw4-before-neutron
+-A PREROUTING -j fw4-before-neutron
+-A PREROUTING -j neutron-openvswi-PREROUTING
+-A OUTPUT -j neutron-openvswi-OUTPUT
+
+#
+# ANSIBLE MANAGED RULES
+#
+
+{{ firewall_raw_table_ipv4 }}
+
+COMMIT
