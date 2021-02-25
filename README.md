@@ -36,6 +36,12 @@ This role is limited to
 * CentOS 7
 * CentOS 6
 
+Due to lack of persistence, `ipset` is limited to
+
+* Ubuntu 20.04 - Focal
+* CentOS 8
+* CentOS 7
+
 Role Variables
 --------------
 
@@ -65,6 +71,9 @@ Role Variables
 * `firewall_raw_ipv6` --- additional lines with raw iptables rules - use same chain names as `firewall_default_raw_ipv6`, default `''`
 * `firewall_echo_request_from_ipv4` --- comma separated string with addresses/nets to allow ICMP echo request from, default not defined
 * `firewall_echo_request_from_ipv6` --- comma separated string with addresses/nets to allow ICMP6 echo request from, default not defined
+* `firewall_enable_ipset` --- enable ipset, default `false`
+* `firewall_ipset` --- the ipset to apply, `name`, `type` and `items`, see example playbook. Default `none`.
+* `firewall_enable_autosave` --- enable/disable autosave of ipsets when service is stoped, default `false`
 
 Dependencies
 ------------
@@ -95,6 +104,13 @@ Example Playbook
             -A fw6-input -p tcp -m tcp --dport 22 -j ACCEPT
           firewall_raw_ipv6: |
             -A fw6-input  -s fe80::/10 -d fe80::/10 -p udp -m udp --sport 547 --dport 546 -j ACCEPT
+          firewall_enable_ipset: true
+          firewall_ipset:                                                                                                                                                     
+            - name: block_tcp
+              type: bitmap:port range 0-65535 comment                                                                                                                         
+              items:                                                                                                                                                          
+                - '21 comment "ftp"'
+                - '443 comment "https"'
 
 Testing
 -------

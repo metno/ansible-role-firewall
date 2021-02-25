@@ -24,3 +24,14 @@ firewall_enable_ipv6_forward: false
 
 firewall_flush_on_change: false
 firewall_is_neutron: false
+
+firewall_enable_ipset: false
+firewall_ipset_enable_on_boot: true
+
+firewall_ipset_config:
+  RedHat: "/etc/sysconfig/ipset-config"
+  Debian: "/etc/default/netfilter-persistent"
+
+firewall_ipset_savefile:
+  RedHat: "/etc/sysconfig/ipset"
+  Debian: "/etc/iptables/ipset"

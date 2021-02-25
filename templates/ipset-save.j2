@@ -1,0 +1,8 @@
+{{ ansible_managed|comment }}
+
+{% for set in firewall_ipset %}
+create {{ set.name }} {{ set.type }}
+{% for i in set['items'] %}
+add {{ set.name }} {{ i }}
+{% endfor -%}
+{% endfor -%}
