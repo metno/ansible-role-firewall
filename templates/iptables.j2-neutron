@@ -155,6 +155,7 @@
 
 COMMIT
 
+{% if firewall_raw_table_ipv4 %}
 *raw
 :PREROUTING ACCEPT [0:0]
 :OUTPUT ACCEPT [0:0]
@@ -174,3 +175,4 @@ COMMIT
 {{ firewall_raw_table_ipv4 }}
 
 COMMIT
+{% endif %}

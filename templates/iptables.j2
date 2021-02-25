@@ -146,6 +146,7 @@
 
 COMMIT
 
+{% if firewall_raw_table_ipv4 %}
 *raw
 :PREROUTING ACCEPT [100003843:50254833937]
 :OUTPUT ACCEPT [96854086:97728840028]
@@ -157,3 +158,4 @@ COMMIT
 {{ firewall_raw_table_ipv4 }}
 
 COMMIT
+{% endif %}
