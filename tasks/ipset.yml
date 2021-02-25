@@ -1,0 +1,79 @@
+# vim: ai et ts=2 st=2 sw=2 :                                                                                                                                                 
+---
+- name: check if we're running supported os
+  assert:
+    fail_msg: "{{ role_name }} only supports ubuntu versions 20 and centos versions 7, 8! The other distros are lacking persistent ipset"
+    success_msg: "{{ role_name }} supports {{ ansible_distribution }} version {{ ansible_distribution_version }}"
+    quiet: "{{ not ansible_check_mode }}"
+    that:
+      ( ansible_distribution == "Ubuntu" and ansible_distribution_version|int in [20] )
+      or ( ansible_distribution == "CentOS" and ansible_distribution_major_version|int in [7, 8] )
+
+- name: set os-spesific variables
+  set_fact:
+    ipset_config: "{{ firewall_ipset_config[ansible_os_family] }}"
+    ipset_savefile: "{{ firewall_ipset_savefile[ansible_os_family] }}"
+
+- name: install ipset and ipset-service for RHEL
+  yum:
+    name:
+      - ipset
+      - ipset-service
+  check_mode: false
+  when: ansible_os_family == "RedHat"
+
+- name: install ipset and ipset-service for Debian
+  apt:
+    name:
+      - ipset
+      - ipset-persistent
+  check_mode: false
+  when: ansible_os_family == "Debian"
+
+- name: turn off autosave
+  lineinfile:
+    path: "{{ ipset_config }}"
+    regexp: "^{{ item }}="
+    line: "{{ item }}=\"no\""
+  loop:
+    - IPSET_SAVE_ON_STOP
+    - IPSET_SAVE_ON_RESTART
+
+- name: check if savefile exists
+  stat:
+    path: "{{ ipset_savefile }}"
+  register: ipset_savefile_exists
+
+- name: read current ipsets from ipset file into variable
+  shell: |
+    awk '/^create/ { print $2 }' < {{ ipset_savefile }}
+  register: saved_ipsets
+  when: ipset_savefile_exists.stat.exists
+  changed_when: false
+
+- name: apply template to create ipset-save file
+  template:
+    src: ipset-save.j2
+    dest: "{{ ipset_savefile }}"
+    owner: root
+    group: root
+    mode: 0640
+  register: ipset_template
+
+- name: silently flush and delete each ipset
+  shell: |
+    ipset -q flush {{ item }}
+    ipset -q destroy {{ item }}
+  loop: "{{ saved_ipsets.stdout_lines }}"
+  when: saved_ipsets.changed and ipset_template.changed
+  ignore_errors: yes
+
+- name: apply the save file
+  shell: |
+    ipset restore -! < {{ ipset_savefile }}
+  when: ipset_template.changed
+
+- name: enable ipset on boot
+  service:
+    name: ipset
+    enabled: "{{ firewall_ipset_enable_on_boot }}"
