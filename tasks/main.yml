@@ -38,6 +38,10 @@
   set_fact:
     is_neutron_loaded: "{{ neutron_loaded.rc == 0 }}"
 
+- name: create ipsets before iptables
+  include: "ipset.yml"
+  when: firewall_ipset is defined
+
 - name: turn off ufw and firewalld
   include: "{{ ansible_os_family | lower }}.yml"
 

@@ -94,10 +94,6 @@
   register: iptables_templates_neutron
   when: firewall_is_neutron
 
-- name: create ipsets
-  include: "ipset.yml"
-  when: firewall_ipset is defined
-
 - name: load new rules
   shell: "set -o pipefail && cat /etc/sysconfig/{{ item }} | {{ item }}-restore --noflush"
   args:

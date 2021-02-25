@@ -11,7 +11,7 @@
       firewall_enable_ipv4_forward: true
       firewall_enable_ipv6_forward: false
       firewall_log_enabled: true
-      firewall_is_neutron: true
+      firewall_is_neutron: false
       firewall_log_level: -m limit --limit 3/hour --limit-burst 5
       firewall_echo_request_from_ipv4: 127.0.0.1
       firewall_echo_request_from_ipv6: ::1/128
@@ -26,6 +26,8 @@
         -A fw6-input  -s fe80::/10 -d fe80::/10 -p udp -m udp --sport 547 --dport 546 -j ACCEPT
         #-A fw6-input  -s fe80::/10 -d fe80::/10 -p udp -m udp --sport 542 --dport 542 -j ACCEPT
       firewall_enable_ipset: true
+      firewall_raw_table_ipv4: |
+        -A PREROUTING -p tcp -m tcp -m set --match-set block_tcp dst -j DROP
       firewall_ipset:
         - name: block_tcp
           type: bitmap:port range 0-65535 comment

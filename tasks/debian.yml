@@ -39,10 +39,6 @@
     update_cache: yes
     cache_valid_time: "{{ 3600 * 3 }}"
 
-- name: create ipsets
-  include: "ipset.yml"
-  when: firewall_ipset is defined
-
 - name: start iptables on boot ubuntu < 16
   service:
     name: "{{ iptables_service_name }}"
