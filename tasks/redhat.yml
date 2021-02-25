@@ -96,7 +96,7 @@
 
 - name: create ipsets
   include: "ipset.yml"
-  when: firewall_ipset
+  when: firewall_ipset is defined
 
 - name: load new rules
   shell: "set -o pipefail && cat /etc/sysconfig/{{ item }} | {{ item }}-restore --noflush"

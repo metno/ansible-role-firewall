@@ -155,7 +155,7 @@
 
 COMMIT
 
-{% if firewall_raw_table_ipv4 %}
+{% if firewall_raw_table_ipv4 is defined %}
 *raw
 :PREROUTING ACCEPT [0:0]
 :OUTPUT ACCEPT [0:0]

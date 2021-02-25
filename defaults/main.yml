@@ -18,8 +18,8 @@ firewall_default_raw_ipv6: |
 
 firewall_raw_ipv4: ''
 firewall_raw_ipv6: ''
-firewall_raw_table_ipv4: ''
-firewall_raw_table_ipv6: ''
+#firewall_raw_table_ipv4: ''
+#firewall_raw_table_ipv6: ''
 
 firewall_enable_ipv4_forward: false
 firewall_enable_ipv6_forward: false

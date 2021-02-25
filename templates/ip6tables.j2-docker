@@ -168,7 +168,7 @@
 
 COMMIT
 
-{% if firewall_raw_table_ipv6 %}
+{% if firewall_raw_table_ipv6 is defined %}
 *raw
 :PREROUTING ACCEPT [59681:6071443]
 :OUTPUT ACCEPT [19697:1989513]
