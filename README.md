@@ -69,12 +69,19 @@ Role Variables
     * `fw6-output` --- output chain ipv4, used when `firewall_policy_output` is set to `DROP`
 * `firewall_raw_ipv4` --- additional lines with raw iptables rules - use same chain names as `firewall_default_raw_ipv4`, default `''`
 * `firewall_raw_ipv6` --- additional lines with raw iptables rules - use same chain names as `firewall_default_raw_ipv6`, default `''`
-* `firewall_raw_table_ipv4` --- define rules for the raw table (this is executed before any other IP tables), default `''`
+* `firewall_raw_table_ipv4` --- define rules for the raw table, this is executed before any other IP tables, default `''`
+    * Available chains `PREROUTING` and `OUTPUT`.
+    * Newtron machines have the chain `fw4-before-newtron`.
+* `firewall_raw_table_ipv6` --- define rules for the raw table, this is executed before any other IP tables - available chains `PREROUTING` and `OUTPUT`, default `''`
+    * Available chains `PREROUTING` and `OUTPUT`.
+    * Newtron machines also have the chain `fw6-before-newtron`.
 * `firewall_echo_request_from_ipv4` --- comma separated string with addresses/nets to allow ICMP echo request from, default not defined
 * `firewall_echo_request_from_ipv6` --- comma separated string with addresses/nets to allow ICMP6 echo request from, default not defined
+<!---
 * `firewall_enable_ipset` --- enable ipset, default `false`
+-->
 * `firewall_ipset` --- the ipset to apply, `name`, `type` and `items`, see example playbook. Default `none`.
-* `firewall_enable_autosave` --- enable/disable autosave of ipsets when service is stoped, default `false`
+* `firewall_ipset_enable_autosave` --- enable/disable autosave of ipsets when service is stoped, default `false`
 
 Dependencies
 ------------
