@@ -41,7 +41,7 @@
 
 - name: create ipsets
   include: "ipset.yml"
-  when: firewall_enable_ipset
+  when: firewall_ipset
 
 - name: start iptables on boot ubuntu < 16
   service:

@@ -77,9 +77,6 @@ Role Variables
     * Newtron machines also have the chain `fw6-before-newtron`.
 * `firewall_echo_request_from_ipv4` --- comma separated string with addresses/nets to allow ICMP echo request from, default not defined
 * `firewall_echo_request_from_ipv6` --- comma separated string with addresses/nets to allow ICMP6 echo request from, default not defined
-<!---
-* `firewall_enable_ipset` --- enable ipset, default `false`
--->
 * `firewall_ipset` --- the ipset to apply, `name`, `type` and `items`, see example playbook. Default `none`.
 * `firewall_ipset_enable_autosave` --- enable/disable autosave of ipsets when service is stoped, default `false`
 
