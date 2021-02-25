@@ -34,7 +34,6 @@ This role is limited to
 * Ubuntu 14.04 - Trusty
 * CentOS 8
 * CentOS 7
-* CentOS 6
 
 Due to lack of persistence, `ipset` is limited to
 

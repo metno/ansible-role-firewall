@@ -21,5 +21,6 @@ galaxy_info:
     - firewall
     - iptables
     - security
+    - ipset
 
 dependencies: []
