@@ -110,7 +110,6 @@ Example Playbook
             -A fw6-input  -s fe80::/10 -d fe80::/10 -p udp -m udp --sport 547 --dport 546 -j ACCEPT
           firewall_raw_table_ipv4: |
 		    -A PREROUTING ! -s 10.0.0.0/28 -p tcp -m tcp --dport 443 -j DROP
-          firewall_enable_ipset: true
           firewall_ipset:                                                                                                                                                     
             - name: block_tcp
               type: bitmap:port range 0-65535 comment                                                                                                                         
