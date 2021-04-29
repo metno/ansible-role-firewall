@@ -150,12 +150,12 @@
 # ANSIBLE MANAGED RULES
 #
 
-{{ firewall_default_raw_ipv4 }}
-{{ firewall_raw_ipv4 }}
+{{ firewall_table_filter_default_ipv4 }}
+{{ firewall_table_filter_ipv4 }}
 
 COMMIT
 
-{% if firewall_raw_table_ipv4 is defined %}
+{% if firewall_table_raw_ipv4 is defined %}
 *raw
 :PREROUTING ACCEPT [0:0]
 :OUTPUT ACCEPT [0:0]
@@ -172,7 +172,7 @@ COMMIT
 # ANSIBLE MANAGED RULES
 #
 
-{{ firewall_raw_table_ipv4 }}
+{{ firewall_table_raw_ipv4 }}
 
 COMMIT
 {% endif %}

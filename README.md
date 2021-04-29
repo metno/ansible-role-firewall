@@ -56,22 +56,22 @@ Role Variables
 * `firewall_policy_input`, `firewall_policy_forward`, `firewall_policy_output` --- set policies for firewall, default `ACCEPT`
   * `ACCEPT` --- accept all packages
   * `DROP` --- drop packages silently
-* `firewall_default_raw_ipv4` --- lines with raw iptables rules, default `'-A fw4-input -p tcp -m tcp --dport 22 -j ACCEPT'`  
+* `firewall_table_filter_default_ipv4` --- lines with raw iptables rules, default `'-A fw4-input -p tcp -m tcp --dport 22 -j ACCEPT'`  
     Use the following chain names, see examples for more context
     * `fw4-input` --- input chain ipv4, used when `firewall_policy_input` is set to `DROP`
     * `fw4-forward` --- forward chain ipv4, used when `firewall_policy_forward` is set to `DROP`
     * `fw4-output` --- output chain ipv4, used when `firewall_policy_output` is set to `DROP`
-* `firewall_default_raw_ipv6` --- lines with raw iptables rules, default `'-A fw6-input -p tcp -m tcp --dport 22 -j ACCEPT'`  
+* `firewall_table_filter_default_ipv6` --- lines with raw iptables rules, default `'-A fw6-input -p tcp -m tcp --dport 22 -j ACCEPT'`  
     Use the following chain names, see examples for more context
     * `fw6-input` --- input chain ipv4, used when `firewall_policy_input` is set to `DROP`
     * `fw6-forward` --- forward chain ipv4, used when `firewall_policy_forward` is set to `DROP`
     * `fw6-output` --- output chain ipv4, used when `firewall_policy_output` is set to `DROP`
-* `firewall_raw_ipv4` --- additional lines with raw iptables rules - use same chain names as `firewall_default_raw_ipv4`, default `''`
-* `firewall_raw_ipv6` --- additional lines with raw iptables rules - use same chain names as `firewall_default_raw_ipv6`, default `''`
-* `firewall_raw_table_ipv4` --- define rules for the raw table, this is executed before any other IP tables, default `''`
+* `firewall_table_filter_ipv4` --- additional lines with raw iptables rules - use same chain names as `firewall_table_filter_default_ipv4`, default `''`
+* `firewall_table_filter_ipv6` --- additional lines with raw iptables rules - use same chain names as `firewall_table_filter_default_ipv6`, default `''`
+* `firewall_table_raw_ipv4` --- define rules for the raw table, this is executed before any other IP tables, default `''`
     * Available chains `PREROUTING` and `OUTPUT`.
     * Newtron machines have the chain `fw4-before-newtron`.
-* `firewall_raw_table_ipv6` --- define rules for the raw table, this is executed before any other IP tables - available chains `PREROUTING` and `OUTPUT`, default `''`
+* `firewall_table_raw_ipv6` --- define rules for the raw table, this is executed before any other IP tables - available chains `PREROUTING` and `OUTPUT`, default `''`
     * Available chains `PREROUTING` and `OUTPUT`.
     * Newtron machines also have the chain `fw6-before-newtron`.
 * `firewall_echo_request_from_ipv4` --- comma separated string with addresses/nets to allow ICMP echo request from, default not defined
@@ -100,15 +100,15 @@ Example Playbook
           firewall_echo_request_from_ipv4: 127.0.0.1
           firewall_echo_request_from_ipv6: ::1/128
           firewall_log_level: -m limit --limit 3/hour --limit-burst 5
-          firewall_default_raw_ipv4: |
+          firewall_table_filter_default_ipv4: |
             -A fw4-input -p tcp -m tcp --dport 22 -j ACCEPT
-          firewall_raw_ipv4: |
+          firewall_table_filter_ipv4: |
             -A fw4-input -s 10.0.0.0/24 -j ACCEPT
-          firewall_default_raw_ipv6: |
+          firewall_table_filter_default_ipv6: |
             -A fw6-input -p tcp -m tcp --dport 22 -j ACCEPT
-          firewall_raw_ipv6: |
+          firewall_table_filter_ipv6: |
             -A fw6-input  -s fe80::/10 -d fe80::/10 -p udp -m udp --sport 547 --dport 546 -j ACCEPT
-          firewall_raw_table_ipv4: |
+          firewall_table_raw_ipv4: |
 		    -A PREROUTING ! -s 10.0.0.0/28 -p tcp -m tcp --dport 443 -j DROP
           firewall_ipset:                                                                                                                                                     
             - name: block_tcp

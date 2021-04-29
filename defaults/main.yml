@@ -11,15 +11,15 @@ firewall_policy_output: ACCEPT
 firewall_log_enabled: true
 firewall_log_level: -m limit --limit 3/min --limit-burst 10
 
-firewall_default_raw_ipv4: |
+firewall_table_filter_default_ipv4: |
   -A fw4-input -p tcp -m tcp --dport 22 -j ACCEPT
-firewall_default_raw_ipv6: |
+firewall_table_filter_default_ipv6: |
   -A fw6-input -p tcp -m tcp --dport 22 -j ACCEPT
 
-firewall_raw_ipv4: ''
-firewall_raw_ipv6: ''
-#firewall_raw_table_ipv4: ''
-#firewall_raw_table_ipv6: ''
+firewall_table_filter_ipv4: ''
+firewall_table_filter_ipv6: ''
+#firewall_table_raw_ipv4: ''
+#firewall_table_raw_ipv6: ''
 
 firewall_enable_ipv4_forward: false
 firewall_enable_ipv6_forward: false

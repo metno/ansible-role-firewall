@@ -163,12 +163,12 @@
 # ANSIBLE MANAGED RULES
 #
 
-{{ firewall_default_raw_ipv6 }}
-{{ firewall_raw_ipv6 }}
+{{ firewall_table_filter_default_ipv6 }}
+{{ firewall_table_filter_ipv6 }}
 
 COMMIT
 
-{% if firewall_raw_table_ipv6 is defined %}
+{% if firewall_table_raw_ipv6 is defined %}
 *raw
 :PREROUTING ACCEPT [59681:6071443]
 :OUTPUT ACCEPT [19697:1989513]
@@ -177,7 +177,7 @@ COMMIT
 # ANSIBLE MANAGED RULES
 #
 
-{{ firewall_raw_table_ipv6 }}
+{{ firewall_table_raw_ipv6 }}
 
 COMMIT
 {% endif %}
