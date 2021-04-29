@@ -28,6 +28,7 @@
     name:
       - ipset
       - ipset-persistent
+    cache_valid_time: 3600
   check_mode: false
   when: ansible_os_family == "Debian"
 
