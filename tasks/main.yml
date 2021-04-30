@@ -41,9 +41,9 @@
 - name: create ipsets before iptables
   include: "ipset.yml"
   when:
-    - firewall_ipset is defined
-    - ansible_distribution == "Ubuntu" and ansible_distribution_version|int >= 20
-    - ansible_distribution == "CentOS" and ansible_distribution_major_version|int in [7, 8]
+    (firewall_ipset is defined) and
+    (ansible_distribution == "Ubuntu" and ansible_distribution_major_version|int >= 20) or
+    (ansible_distribution == "CentOS" and ansible_distribution_major_version|int in [7, 8])
 
 - name: turn off ufw and firewalld
   include: "{{ ansible_os_family | lower }}.yml"
