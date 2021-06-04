@@ -109,11 +109,11 @@ Example Playbook
           firewall_table_filter_ipv6: |
             -A fw6-input  -s fe80::/10 -d fe80::/10 -p udp -m udp --sport 547 --dport 546 -j ACCEPT
           firewall_table_raw_ipv4: |
-		    -A PREROUTING ! -s 10.0.0.0/28 -p tcp -m tcp --dport 443 -j DROP
-          firewall_ipset:                                                                                                                                                     
+            -A PREROUTING ! -s 10.0.0.0/28 -p tcp -m tcp --dport 443 -j DROP
+          firewall_ipset:
             - name: block_tcp
-              type: bitmap:port range 0-65535 comment                                                                                                                         
-              items:                                                                                                                                                          
+              type: bitmap:port range 0-65535 comment
+              items:
                 - '21 comment "ftp"'
                 - '443 comment "https"'
 Testing
@@ -141,6 +141,15 @@ This uses cluster ssh to work with all vagrant boxes at the same time.
 ```bash
 vagrant ssh-config > ~/.ssh/config
 cat ~/.ssh/config | grep ^Host | cut -d\  -f2 | xargs cssh
+```
+
+### Testing on a newer OS
+
+```bash
+cat <<EOF ~/.ssh/config
+Host *
+  PubkeyAcceptedKeyTypes +ssh-rsa
+EOF
 ```
 
 License
