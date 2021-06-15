@@ -4,6 +4,44 @@
   become: yes
   roles:
     - role: ../../.
+      when:
+        (ansible_distribution == "Ubuntu" and ansible_distribution_major_version|int >= 20) or
+        (ansible_distribution == "CentOS" and ansible_distribution_major_version|int in [7, 8])
+      firewall_flush_on_change: false
+      firewall_policy_input: DROP
+      firewall_policy_forward: DROP
+      firewall_policy_output: ACCEPT
+      firewall_enable_ipv4_forward: true
+      firewall_enable_ipv6_forward: false
+      firewall_log_enabled: true
+      firewall_is_neutron: false
+      firewall_log_level: -m limit --limit 3/hour --limit-burst 5
+      firewall_echo_request_from_ipv4: 127.0.0.1
+      firewall_echo_request_from_ipv6: ::1/128
+      firewall_table_filter_default_ipv4: |
+        -A fw4-input -p tcp -m tcp --dport 22 -j ACCEPT
+        #-A fw4-input -p tcp -m tcp --dport 23 -j ACCEPT
+      firewall_table_filter_ipv4: |
+        -A fw4-input -s 10.0.0.0/24 -j ACCEPT
+        -A fw4-input -s 192.168.0.0/24 -m set --match-set block_tcp dst -j DROP
+      firewall_table_filter_default_ipv6: |
+        -A fw6-input -p tcp -m tcp --dport 22 -j ACCEPT
+      firewall_table_filter_ipv6: |
+        -A fw6-input  -s fe80::/10 -d fe80::/10 -p udp -m udp --sport 547 --dport 546 -j ACCEPT
+        #-A fw6-input  -s fe80::/10 -d fe80::/10 -p udp -m udp --sport 542 --dport 542 -j ACCEPT
+      firewall_ipset:
+        - name: block_tcp
+          type: bitmap:port range 0-65535 comment
+          items:
+            - '21 comment "ftp"'
+            - '443 comment "https"'
+
+- hosts: all
+  become: yes
+  roles:
+    - role: ../../.
+      when:
+        (ansible_distribution == "Ubuntu" and ansible_distribution_major_version|int < 20)
       firewall_flush_on_change: false
       firewall_policy_input: DROP
       firewall_policy_forward: DROP
@@ -24,10 +62,3 @@
         -A fw6-input -p tcp -m tcp --dport 22 -j ACCEPT
       firewall_table_filter_ipv6: |
         -A fw6-input  -s fe80::/10 -d fe80::/10 -p udp -m udp --sport 547 --dport 546 -j ACCEPT
-        #-A fw6-input  -s fe80::/10 -d fe80::/10 -p udp -m udp --sport 542 --dport 542 -j ACCEPT
-      firewall_ipset:
-        - name: block_tcp
-          type: bitmap:port range 0-65535 comment
-          items:
-            - '21 comment "ftp"'
-            - '443 comment "https"'
