@@ -37,3 +37,6 @@ firewall_ipset_config:
 firewall_ipset_savefile:
   RedHat: "/etc/sysconfig/ipset"
   Debian: "/etc/iptables/ipset"
+
+real_yes: 'yes'
+real_no: 'no'

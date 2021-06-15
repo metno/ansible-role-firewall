@@ -4,7 +4,6 @@
   set_fact:
     ipset_config: "{{ firewall_ipset_config[ansible_os_family] }}"
     ipset_savefile: "{{ firewall_ipset_savefile[ansible_os_family] }}"
-    ipset_autosave: "{{ 'yes' if firewall_ipset_enable_autosave else 'no' }}"
 
 - name: install ipset and ipset-service for RHEL
   yum:
@@ -27,7 +26,8 @@
   lineinfile:
     path: "{{ ipset_config }}"
     regexp: "^{{ item }}="
-    line: "{{ item }}=\"{{ ipset_autosave }}\""
+    #line: "{{ item }}=\"{{ ipset_autosave }}\""
+    line: "{{ item }}=\"{{ 'yes' if firewall_ipset_enable_autosave else 'no' }}\""
   loop:
     - IPSET_SAVE_ON_STOP
     - IPSET_SAVE_ON_RESTART
