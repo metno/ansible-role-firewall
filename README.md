@@ -6,7 +6,7 @@ A simple firewall for Linux hosts, based on the common iptables/netfilter comman
 Version
 -------
 
-* `3.5.0` --- add RHEL8, remove CentOS 6
+* `3.6.0` --- add RHEL8, remove CentOS 6
 * `3.5.0` --- remove ubuntu precise from testing
 * `3.4.0` --- added ubuntu focal, 20.04
 * `3.3.2` --- tested with Ansible 2.9.11
