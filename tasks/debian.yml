@@ -1,10 +1,5 @@
 # vim: ai et ts=2 st=2 sw=2 :
 ---
-- name: set name of iptables service ubuntu < 16
-  set_fact:
-    iptables_service_name: iptables-persistent
-  when: ansible_distribution_version|int < 16
-
 - name: set name of iptables service ubuntu >= 16
   set_fact:
     iptables_service_name: netfilter-persistent
@@ -38,11 +33,6 @@
     force_apt_get: true
     update_cache: yes
     cache_valid_time: "{{ 3600 * 3 }}"
-
-- name: start iptables on boot ubuntu < 16
-  service:
-    name: "{{ iptables_service_name }}"
-    enabled: "{{ firewall_enable_on_boot }}"
 
 - name: iptables templates
   template:
