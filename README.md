@@ -6,6 +6,7 @@ A simple firewall for Linux hosts, based on the common iptables/netfilter comman
 Version
 -------
 
+* `3.7.0` --- add Jammy, remove CentOS 8
 * `3.6.0` --- add RHEL8, remove CentOS 6 and trusty
 * `3.5.0` --- remove ubuntu precise from testing
 * `3.4.0` --- added ubuntu focal, 20.04
@@ -29,10 +30,10 @@ Requirements
 
 This role is limited to
 
+* Ubuntu 22.04 - Jammy
 * Ubuntu 20.04 - Focal
 * Ubuntu 18.04 - Bionic
 * Ubuntu 16.04 - Xenial
-* CentOS 8
 * CentOS 7
 * RHEL 8
 
