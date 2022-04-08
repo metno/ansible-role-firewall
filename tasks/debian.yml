@@ -31,7 +31,7 @@
       - iptables
       - iptables-persistent
     force_apt_get: true
-    update_cache: yes
+    update_cache: true
     cache_valid_time: "{{ 3600 * 3 }}"
 
 - name: iptables templates
