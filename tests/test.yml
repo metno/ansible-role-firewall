@@ -1,7 +1,7 @@
 # vim: ai et ts=2 st=2 sw=2 :
 ---
 - hosts: all
-  become: yes
+  become: true
   roles:
     - role: ../../.
       firewall_flush_on_change: false
@@ -25,4 +25,3 @@
       firewall_raw_ipv6: |
         -A fw6-input  -s fe80::/10 -d fe80::/10 -p udp -m udp --sport 547 --dport 546 -j ACCEPT
         #-A fw6-input  -s fe80::/10 -d fe80::/10 -p udp -m udp --sport 542 --dport 542 -j ACCEPT
-
