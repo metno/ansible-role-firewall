@@ -6,6 +6,7 @@ A simple firewall for Linux hosts, based on the common iptables/netfilter comman
 Version
 -------
 
+* `3.8.0` --- update to ansible 2.12.9
 * `3.7.0` --- add Jammy, remove CentOS 8
 * `3.6.0` --- add RHEL8, remove CentOS 6 and trusty
 * `3.5.0` --- remove ubuntu precise from testing

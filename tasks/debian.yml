@@ -1,11 +1,11 @@
 # vim: ai et ts=2 st=2 sw=2 :
 ---
-- name: set name of iptables service ubuntu >= 16
+- name: Set name of iptables service ubuntu >= 16
   set_fact:
     iptables_service_name: netfilter-persistent
-  when: ansible_distribution_version|int >= 16
+  when: ansible_distribution_version | int >= 16
 
-- name: check if ufw package is installed (on debian)
+- name: Check if ufw package is installed (on debian)
   shell: dpkg --get-selections ufw | grep install
   args:
     warn: false
@@ -15,7 +15,7 @@
   when:
     - firewall_disable_ufw
 
-- name: disable the ufw firewall (on debian, if configured)
+- name: Disable the ufw firewall (on debian, if configured)
   service:
     name: ufw
     state: stopped
@@ -25,7 +25,7 @@
     - firewall_disable_ufw
     - ufw_installed.rc == 0
 
-- name: add persistance for iptables
+- name: Add persistance for iptables
   apt:
     name:
       - iptables
@@ -34,7 +34,7 @@
     update_cache: true
     cache_valid_time: "{{ 3600 * 3 }}"
 
-- name: iptables templates
+- name: Iptables templates
   template:
     src: "{{ item.0 }}.j2"
     dest: "/etc/iptables/{{ item.1 }}"
@@ -52,7 +52,7 @@
     - not is_docker
     - not firewall_is_neutron
 
-- name: iptables templates for docker hosts
+- name: Iptables templates for docker hosts
   template:
     src: "{{ item.0 }}.j2-docker"
     dest: "/etc/iptables/{{ item.1 }}"
@@ -68,7 +68,7 @@
   register: iptables_templates_docker
   when: is_docker
 
-- name: iptables templates for neutron hosts
+- name: Iptables templates for neutron hosts
   template:
     src: "{{ item.0 }}.j2-neutron"
     dest: "/etc/iptables/{{ item.1 }}"
@@ -84,7 +84,7 @@
   register: iptables_templates_neutron
   when: firewall_is_neutron
 
-- name: load new rules
+- name: Load new rules
   shell: "set -o pipefail && cat /etc/iptables/{{ item.1 }} | {{ item.0 }}-restore --noflush"
   args:
     executable: bash
@@ -98,7 +98,7 @@
     - not firewall_flush_on_change
     - not is_neutron_loaded
 
-- name: load new rules when neutron is loaded
+- name: Load new rules when neutron is loaded
   shell: "set -o pipefail && cat /etc/iptables/{{ item.1 }} | sed 's/^:neutron.*$//g' | {{ item.0 }}-restore --noflush"
   args:
     executable: bash
@@ -112,7 +112,7 @@
     - not firewall_flush_on_change
     - is_neutron_loaded
 
-- name: restart iptables
+- name: Restart iptables
   service:
     name: "{{ iptables_service_name }}"
     state: restarted

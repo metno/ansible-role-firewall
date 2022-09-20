@@ -1,11 +1,11 @@
 # vim: ai et ts=2 st=2 sw=2 :
 ---
-- name: check if firewalld is installed (on redhat)
+- name: Check if firewalld is installed (on redhat)
   yum:
     list: firewalld
   register: firewall_installed
 
-- name: disable the firewalld service (on rhel, if configured)
+- name: Disable the firewalld service (on rhel, if configured)
   service:
     name: firewalld
     state: stopped
@@ -15,26 +15,26 @@
     - firewall_disable_firewalld
     - firewall_installed.results | selectattr("yumstate", "match", "installed")|list|length > 0
 
-- name: install iptables centos 7
+- name: Install iptables centos 7
   yum:
     name:
       - iptables
       - iptables-services
-  when: ansible_distribution_major_version|int == 7
+  when: ansible_distribution_major_version | int == 7
 
-- name: install iptables centos/rhel 8
+- name: Install iptables centos/rhel 8
   dnf:
     name:
       - iptables
       - iptables-services
-  when: ansible_distribution_major_version|int == 8
+  when: ansible_distribution_major_version | int == 8
 
-- name: enable firewall on boot
+- name: Enable firewall on boot
   service:
     name: iptables
     enabled: "{{ firewall_enable_on_boot }}"
 
-- name: iptables templates
+- name: Iptables templates
   template:
     src: "{{ item }}.j2"
     dest: "/etc/sysconfig/{{ item }}"
@@ -50,7 +50,7 @@
     - not is_docker
     - not firewall_is_neutron
 
-- name: iptables templates for docker hosts
+- name: Iptables templates for docker hosts
   template:
     src: "{{ item }}.j2-docker"
     dest: "/etc/sysconfig/{{ item }}"
@@ -64,7 +64,7 @@
   register: iptables_templates_docker
   when: is_docker
 
-- name: iptables templates for neutron hosts
+- name: Iptables templates for neutron hosts
   template:
     src: "{{ item }}.j2-neutron"
     dest: "/etc/sysconfig/{{ item }}"
@@ -78,7 +78,7 @@
   register: iptables_templates_neutron
   when: firewall_is_neutron
 
-- name: load new rules
+- name: Load new rules
   shell: "set -o pipefail && cat /etc/sysconfig/{{ item }} | {{ item }}-restore --noflush"
   args:
     executable: bash
@@ -90,7 +90,7 @@
     - not firewall_flush_on_change
     - not is_neutron_loaded
 
-- name: load new rules when neutron is loaded
+- name: Load new rules when neutron is loaded
   shell: "set -o pipefail && cat /etc/sysconfig/{{ item }} | sed 's/^:neutron.*$//g' | {{ item }}-restore --noflush"
   args:
     executable: bash
@@ -102,7 +102,7 @@
     - not firewall_flush_on_change
     - is_neutron_loaded
 
-- name: restart iptables
+- name: Restart iptables
   service:
     name: "{{ item }}"
     state: restarted
