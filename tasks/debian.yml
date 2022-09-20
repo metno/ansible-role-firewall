@@ -1,12 +1,12 @@
 # vim: ai et ts=2 st=2 sw=2 :
 ---
 - name: Set name of iptables service ubuntu >= 16
-  set_fact:
+  ansible.builtin.set_fact:
     iptables_service_name: netfilter-persistent
   when: ansible_distribution_version | int >= 16
 
 - name: Check if ufw package is installed (on debian)
-  shell: dpkg --get-selections ufw | grep install
+  ansible.builtin.shell: dpkg --get-selections ufw | grep install
   args:
     warn: false
   register: ufw_installed
@@ -16,7 +16,7 @@
     - firewall_disable_ufw
 
 - name: Disable the ufw firewall (on debian, if configured)
-  service:
+  ansible.builtin.service:
     name: ufw
     state: stopped
     enabled: false
@@ -26,7 +26,7 @@
     - ufw_installed.rc == 0
 
 - name: Add persistance for iptables
-  apt:
+  ansible.builtin.apt:
     name:
       - iptables
       - iptables-persistent
@@ -35,7 +35,7 @@
     cache_valid_time: "{{ 3600 * 3 }}"
 
 - name: Iptables templates
-  template:
+  ansible.builtin.template:
     src: "{{ item.0 }}.j2"
     dest: "/etc/iptables/{{ item.1 }}"
     owner: root
@@ -53,7 +53,7 @@
     - not firewall_is_neutron
 
 - name: Iptables templates for docker hosts
-  template:
+  ansible.builtin.template:
     src: "{{ item.0 }}.j2-docker"
     dest: "/etc/iptables/{{ item.1 }}"
     owner: root
@@ -69,7 +69,7 @@
   when: is_docker
 
 - name: Iptables templates for neutron hosts
-  template:
+  ansible.builtin.template:
     src: "{{ item.0 }}.j2-neutron"
     dest: "/etc/iptables/{{ item.1 }}"
     owner: root
@@ -85,7 +85,7 @@
   when: firewall_is_neutron
 
 - name: Load new rules
-  shell: "set -o pipefail && cat /etc/iptables/{{ item.1 }} | {{ item.0 }}-restore --noflush"
+  ansible.builtin.shell: "set -o pipefail && cat /etc/iptables/{{ item.1 }} | {{ item.0 }}-restore --noflush"
   args:
     executable: bash
   loop:
@@ -99,7 +99,7 @@
     - not is_neutron_loaded
 
 - name: Load new rules when neutron is loaded
-  shell: "set -o pipefail && cat /etc/iptables/{{ item.1 }} | sed 's/^:neutron.*$//g' | {{ item.0 }}-restore --noflush"
+  ansible.builtin.shell: "set -o pipefail && cat /etc/iptables/{{ item.1 }} | sed 's/^:neutron.*$//g' | {{ item.0 }}-restore --noflush"
   args:
     executable: bash
   loop:
@@ -113,7 +113,7 @@
     - is_neutron_loaded
 
 - name: Restart iptables
-  service:
+  ansible.builtin.service:
     name: "{{ iptables_service_name }}"
     state: restarted
   when:

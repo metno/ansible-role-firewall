@@ -1,7 +1,7 @@
 # vim: ai et ts=2 st=2 sw=2 :
 ---
 - name: Check if we are running supported os
-  assert:
+  ansible.builtin.assert:
     fail_msg: "{{ role_name }} only supports ubuntu versions 16, 18, 20, 22, centos versions 7, and rhel version 8!"
     success_msg: "{{ role_name }} supports {{ ansible_distribution }} version {{ ansible_distribution_version }}"
     quiet: "{{ not ansible_check_mode }}"
@@ -11,7 +11,7 @@
       or ( ansible_distribution == "RedHat" and ansible_distribution_major_version|int in [8] )
 
 - name: Check if dockerd is running
-  command:
+  ansible.builtin.command:
     argv:
       - service
       - docker
@@ -23,11 +23,11 @@
   check_mode: false
 
 - name: Set variable if docker is running
-  set_fact:
+  ansible.builtin.set_fact:
     is_docker: "{{ docker_running.rc == 0 }}"
 
 - name: Check if neutron is loaded
-  shell: "set -o pipefail && iptables-save | grep ':neutron'"
+  ansible.builtin.shell: "set -o pipefail && iptables-save | grep ':neutron'"
   args:
     executable: bash
   register: neutron_loaded
@@ -36,18 +36,18 @@
   check_mode: false
 
 - name: Set variable if neutron is loaded
-  set_fact:
+  ansible.builtin.set_fact:
     is_neutron_loaded: "{{ neutron_loaded.rc == 0 }}"
 
 - name: Turn off ufw and firewalld
-  include: "{{ ansible_os_family | lower }}.yml"
+  ansible.builtin.include: "{{ ansible_os_family | lower }}.yml"
 
 - name: Set ipv4 forwarding
-  sysctl:
+  ansible.posix.sysctl:
     name: net.ipv4.ip_forward
     value: "{{ 1 if firewall_enable_ipv4_forward else 0 }}"
 
 - name: Set ipv6 forwarding
-  sysctl:
+  ansible.posix.sysctl:
     name: net.ipv6.conf.all.forwarding
     value: "{{ 1 if firewall_enable_ipv6_forward else 0 }}"

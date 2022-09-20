@@ -1,12 +1,12 @@
 # vim: ai et ts=2 st=2 sw=2 :
 ---
 - name: Check if firewalld is installed (on redhat)
-  yum:
+  ansible.builtin.yum:
     list: firewalld
   register: firewall_installed
 
 - name: Disable the firewalld service (on rhel, if configured)
-  service:
+  ansible.builtin.service:
     name: firewalld
     state: stopped
     enabled: false
@@ -16,26 +16,26 @@
     - firewall_installed.results | selectattr("yumstate", "match", "installed")|list|length > 0
 
 - name: Install iptables centos 7
-  yum:
+  ansible.builtin.yum:
     name:
       - iptables
       - iptables-services
   when: ansible_distribution_major_version | int == 7
 
 - name: Install iptables centos/rhel 8
-  dnf:
+  ansible.builtin.dnf:
     name:
       - iptables
       - iptables-services
   when: ansible_distribution_major_version | int == 8
 
 - name: Enable firewall on boot
-  service:
+  ansible.builtin.service:
     name: iptables
     enabled: "{{ firewall_enable_on_boot }}"
 
 - name: Iptables templates
-  template:
+  ansible.builtin.template:
     src: "{{ item }}.j2"
     dest: "/etc/sysconfig/{{ item }}"
     owner: root
@@ -51,7 +51,7 @@
     - not firewall_is_neutron
 
 - name: Iptables templates for docker hosts
-  template:
+  ansible.builtin.template:
     src: "{{ item }}.j2-docker"
     dest: "/etc/sysconfig/{{ item }}"
     owner: root
@@ -65,7 +65,7 @@
   when: is_docker
 
 - name: Iptables templates for neutron hosts
-  template:
+  ansible.builtin.template:
     src: "{{ item }}.j2-neutron"
     dest: "/etc/sysconfig/{{ item }}"
     owner: root
@@ -79,7 +79,7 @@
   when: firewall_is_neutron
 
 - name: Load new rules
-  shell: "set -o pipefail && cat /etc/sysconfig/{{ item }} | {{ item }}-restore --noflush"
+  ansible.builtin.shell: "set -o pipefail && cat /etc/sysconfig/{{ item }} | {{ item }}-restore --noflush"
   args:
     executable: bash
   loop:
@@ -91,7 +91,7 @@
     - not is_neutron_loaded
 
 - name: Load new rules when neutron is loaded
-  shell: "set -o pipefail && cat /etc/sysconfig/{{ item }} | sed 's/^:neutron.*$//g' | {{ item }}-restore --noflush"
+  ansible.builtin.shell: "set -o pipefail && cat /etc/sysconfig/{{ item }} | sed 's/^:neutron.*$//g' | {{ item }}-restore --noflush"
   args:
     executable: bash
   loop:
@@ -103,7 +103,7 @@
     - is_neutron_loaded
 
 - name: Restart iptables
-  service:
+  ansible.builtin.service:
     name: "{{ item }}"
     state: restarted
   loop:
