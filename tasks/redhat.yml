@@ -33,6 +33,7 @@
   ansible.builtin.service:
     name: iptables
     enabled: "{{ firewall_enable_on_boot }}"
+  when: not ansible_check_mode
 
 - name: Iptables templates
   ansible.builtin.template:
