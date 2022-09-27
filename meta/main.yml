@@ -29,4 +29,7 @@ galaxy_info:
     - iptables
     - security
 
+collections:
+  - "ansible.posix"
+
 dependencies: []
