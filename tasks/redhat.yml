@@ -22,12 +22,12 @@
       - iptables-services
   when: ansible_distribution_major_version|int == 7
 
-- name: install iptables centos/rhel 8
+- name: install iptables centos/rhel 8/9
   dnf:
     name:
       - iptables
       - iptables-services
-  when: ansible_distribution_major_version|int == 8
+  when: ansible_distribution_major_version|int in [8,9]
 
 - name: enable firewall on boot
   service:
