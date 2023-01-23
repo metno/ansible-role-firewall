@@ -7,6 +7,7 @@ Version
 -------
 
 * `4.0.0` --- update to ansible 2.12.9
+* `3.8.0` --- add RHEL9 and CentOS Stream 8 support
 * `3.7.0` --- add Jammy, remove CentOS 8
 * `3.6.0` --- add RHEL8, remove CentOS 6 and trusty
 * `3.5.0` --- remove ubuntu precise from testing
@@ -36,7 +37,9 @@ This role is limited to
 * Ubuntu 18.04 - Bionic
 * Ubuntu 16.04 - Xenial
 * CentOS 7
+* CentOS Stream 8
 * RHEL 8
+* RHEL 9
 
 Role Variables
 --------------
