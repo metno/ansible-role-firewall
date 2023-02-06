@@ -1,7 +1,7 @@
 # vim: ai et ts=2 st=2 sw=2 :
 ---
-- name: check if we are running supported os
-  assert:
+- name: Check if we are running supported os
+  ansible.builtin.assert:
     fail_msg: "{{ role_name }} only supports ubuntu versions 16, 18, 20, 22,   centos versions 7, centos strem versions 8, rhel versions 8, 9!"
     success_msg: "{{ role_name }} supports {{ ansible_distribution }} version {{ ansible_distribution_version }}"
     quiet: "{{ not ansible_check_mode }}"
@@ -10,8 +10,8 @@
       or ( ansible_distribution == "CentOS" and ansible_distribution_major_version|int in [7, 8] )
       or ( ansible_distribution == "RedHat" and ansible_distribution_major_version|int in [8, 9] )
 
-- name: check if dockerd is running
-  command:
+- name: Check if dockerd is running
+  ansible.builtin.command:
     argv:
       - service
       - docker
@@ -22,12 +22,12 @@
   changed_when: false
   check_mode: false
 
-- name: set variable if docker is running
-  set_fact:
+- name: Set variable if docker is running
+  ansible.builtin.set_fact:
     is_docker: "{{ docker_running.rc == 0 }}"
 
-- name: check if neutron is loaded
-  shell: "set -o pipefail && iptables-save | grep ':neutron'"
+- name: Check if neutron is loaded
+  ansible.builtin.shell: "set -o pipefail && iptables-save | grep ':neutron'"
   args:
     executable: bash
   register: neutron_loaded
@@ -35,19 +35,19 @@
   failed_when: false
   check_mode: false
 
-- name: set variable if neutron is loaded
-  set_fact:
+- name: Set variable if neutron is loaded
+  ansible.builtin.set_fact:
     is_neutron_loaded: "{{ neutron_loaded.rc == 0 }}"
 
-- name: turn off ufw and firewalld
-  include: "{{ ansible_os_family | lower }}.yml"
+- name: Turn off ufw and firewalld
+  ansible.builtin.include: "{{ ansible_os_family | lower }}.yml"
 
-- name: set ipv4 forwarding
-  sysctl:
+- name: Set ipv4 forwarding
+  ansible.posix.sysctl:
     name: net.ipv4.ip_forward
     value: "{{ 1 if firewall_enable_ipv4_forward else 0 }}"
 
-- name: set ipv6 forwarding
-  sysctl:
+- name: Set ipv6 forwarding
+  ansible.posix.sysctl:
     name: net.ipv6.conf.all.forwarding
     value: "{{ 1 if firewall_enable_ipv6_forward else 0 }}"

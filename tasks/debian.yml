@@ -1,12 +1,12 @@
 # vim: ai et ts=2 st=2 sw=2 :
 ---
-- name: set name of iptables service ubuntu >= 16
-  set_fact:
+- name: Set name of iptables service ubuntu >= 16
+  ansible.builtin.set_fact:
     iptables_service_name: netfilter-persistent
-  when: ansible_distribution_version|int >= 16
+  when: ansible_distribution_version | int >= 16
 
-- name: check if ufw package is installed (on debian)
-  shell: dpkg --get-selections ufw | grep install
+- name: Check if ufw package is installed (on debian)
+  ansible.builtin.shell: dpkg --get-selections ufw | grep install
   args:
     warn: false
   register: ufw_installed
@@ -15,8 +15,8 @@
   when:
     - firewall_disable_ufw
 
-- name: disable the ufw firewall (on debian, if configured)
-  service:
+- name: Disable the ufw firewall (on debian, if configured)
+  ansible.builtin.service:
     name: ufw
     state: stopped
     enabled: false
@@ -25,8 +25,8 @@
     - firewall_disable_ufw
     - ufw_installed.rc == 0
 
-- name: add persistance for iptables
-  apt:
+- name: Add persistance for iptables
+  ansible.builtin.apt:
     name:
       - iptables
       - iptables-persistent
@@ -34,8 +34,8 @@
     update_cache: true
     cache_valid_time: "{{ 3600 * 3 }}"
 
-- name: iptables templates
-  template:
+- name: Iptables templates
+  ansible.builtin.template:
     src: "{{ item.0 }}.j2"
     dest: "/etc/iptables/{{ item.1 }}"
     owner: root
@@ -52,8 +52,8 @@
     - not is_docker
     - not firewall_is_neutron
 
-- name: iptables templates for docker hosts
-  template:
+- name: Iptables templates for docker hosts
+  ansible.builtin.template:
     src: "{{ item.0 }}.j2-docker"
     dest: "/etc/iptables/{{ item.1 }}"
     owner: root
@@ -68,8 +68,8 @@
   register: iptables_templates_docker
   when: is_docker
 
-- name: iptables templates for neutron hosts
-  template:
+- name: Iptables templates for neutron hosts
+  ansible.builtin.template:
     src: "{{ item.0 }}.j2-neutron"
     dest: "/etc/iptables/{{ item.1 }}"
     owner: root
@@ -84,8 +84,8 @@
   register: iptables_templates_neutron
   when: firewall_is_neutron
 
-- name: load new rules
-  shell: "set -o pipefail && cat /etc/iptables/{{ item.1 }} | {{ item.0 }}-restore --noflush"
+- name: Load new rules
+  ansible.builtin.shell: "set -o pipefail && cat /etc/iptables/{{ item.1 }} | {{ item.0 }}-restore --noflush"
   args:
     executable: bash
   loop:
@@ -98,8 +98,8 @@
     - not firewall_flush_on_change
     - not is_neutron_loaded
 
-- name: load new rules when neutron is loaded
-  shell: "set -o pipefail && cat /etc/iptables/{{ item.1 }} | sed 's/^:neutron.*$//g' | {{ item.0 }}-restore --noflush"
+- name: Load new rules when neutron is loaded
+  ansible.builtin.shell: "set -o pipefail && cat /etc/iptables/{{ item.1 }} | sed 's/^:neutron.*$//g' | {{ item.0 }}-restore --noflush"
   args:
     executable: bash
   loop:
@@ -112,8 +112,8 @@
     - not firewall_flush_on_change
     - is_neutron_loaded
 
-- name: restart iptables
-  service:
+- name: Restart iptables
+  ansible.builtin.service:
     name: "{{ iptables_service_name }}"
     state: restarted
   when:

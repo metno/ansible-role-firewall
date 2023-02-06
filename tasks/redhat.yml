@@ -1,12 +1,12 @@
 # vim: ai et ts=2 st=2 sw=2 :
 ---
-- name: check if firewalld is installed (on redhat)
-  yum:
+- name: Check if firewalld is installed (on redhat)
+  ansible.builtin.yum:
     list: firewalld
   register: firewall_installed
 
-- name: disable the firewalld service (on rhel, if configured)
-  service:
+- name: Disable the firewalld service (on rhel, if configured)
+  ansible.builtin.service:
     name: firewalld
     state: stopped
     enabled: false
@@ -15,27 +15,28 @@
     - firewall_disable_firewalld
     - firewall_installed.results | selectattr("yumstate", "match", "installed")|list|length > 0
 
-- name: install iptables centos 7
-  yum:
+- name: Install iptables centos 7
+  ansible.builtin.yum:
     name:
       - iptables
       - iptables-services
-  when: ansible_distribution_major_version|int == 7
+  when: ansible_distribution_major_version | int == 7
 
-- name: install iptables centos/rhel 8/9
-  dnf:
+- name: Install iptables centos/rhel 8
+  ansible.builtin.dnf:
     name:
       - iptables
       - iptables-services
   when: ansible_distribution_major_version|int in [8,9]
 
-- name: enable firewall on boot
-  service:
+- name: Enable firewall on boot
+  ansible.builtin.service:
     name: iptables
     enabled: "{{ firewall_enable_on_boot }}"
+  when: not ansible_check_mode
 
-- name: iptables templates
-  template:
+- name: Iptables templates
+  ansible.builtin.template:
     src: "{{ item }}.j2"
     dest: "/etc/sysconfig/{{ item }}"
     owner: root
@@ -50,8 +51,8 @@
     - not is_docker
     - not firewall_is_neutron
 
-- name: iptables templates for docker hosts
-  template:
+- name: Iptables templates for docker hosts
+  ansible.builtin.template:
     src: "{{ item }}.j2-docker"
     dest: "/etc/sysconfig/{{ item }}"
     owner: root
@@ -64,8 +65,8 @@
   register: iptables_templates_docker
   when: is_docker
 
-- name: iptables templates for neutron hosts
-  template:
+- name: Iptables templates for neutron hosts
+  ansible.builtin.template:
     src: "{{ item }}.j2-neutron"
     dest: "/etc/sysconfig/{{ item }}"
     owner: root
@@ -78,8 +79,8 @@
   register: iptables_templates_neutron
   when: firewall_is_neutron
 
-- name: load new rules
-  shell: "set -o pipefail && cat /etc/sysconfig/{{ item }} | {{ item }}-restore --noflush"
+- name: Load new rules
+  ansible.builtin.shell: "set -o pipefail && cat /etc/sysconfig/{{ item }} | {{ item }}-restore --noflush"
   args:
     executable: bash
   loop:
@@ -90,8 +91,8 @@
     - not firewall_flush_on_change
     - not is_neutron_loaded
 
-- name: load new rules when neutron is loaded
-  shell: "set -o pipefail && cat /etc/sysconfig/{{ item }} | sed 's/^:neutron.*$//g' | {{ item }}-restore --noflush"
+- name: Load new rules when neutron is loaded
+  ansible.builtin.shell: "set -o pipefail && cat /etc/sysconfig/{{ item }} | sed 's/^:neutron.*$//g' | {{ item }}-restore --noflush"
   args:
     executable: bash
   loop:
@@ -102,8 +103,8 @@
     - not firewall_flush_on_change
     - is_neutron_loaded
 
-- name: restart iptables
-  service:
+- name: Restart iptables
+  ansible.builtin.service:
     name: "{{ item }}"
     state: restarted
   loop:
