@@ -40,7 +40,8 @@
     is_neutron_loaded: "{{ neutron_loaded.rc == 0 }}"
 
 - name: Turn off ufw and firewalld
-  ansible.builtin.include_tasks: "{{ ansible_os_family | lower }}.yml"
+  ansible.builtin.include_tasks:
+    file: "{{ ansible_os_family | lower }}.yml"
 
 - name: Set ipv4 forwarding
   ansible.posix.sysctl:

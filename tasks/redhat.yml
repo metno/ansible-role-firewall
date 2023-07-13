@@ -41,7 +41,7 @@
     dest: "/etc/sysconfig/{{ item }}"
     owner: root
     group: root
-    mode: 0600
+    mode: '0600'
     validate: bash -c 'cat %s | /sbin/{{ item }}-restore --test'
   loop:
     - iptables
@@ -57,7 +57,7 @@
     dest: "/etc/sysconfig/{{ item }}"
     owner: root
     group: root
-    mode: 0600
+    mode: '0600'
     validate: bash -c 'cat %s | /sbin/{{ item }}-restore --test'
   loop:
     - iptables
@@ -71,7 +71,7 @@
     dest: "/etc/sysconfig/{{ item }}"
     owner: root
     group: root
-    mode: 0600
+    mode: '0600'
     validate: bash -c 'cat %s | /sbin/{{ item }}-restore --test'
   loop:
     - iptables
