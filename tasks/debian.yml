@@ -40,7 +40,7 @@
     dest: "/etc/iptables/{{ item.1 }}"
     owner: root
     group: root
-    mode: 0600
+    mode: '0600'
     validate: bash -c 'cat %s | /sbin/{{ item.0 }}-restore --test'
   loop:
     - - iptables
@@ -58,7 +58,7 @@
     dest: "/etc/iptables/{{ item.1 }}"
     owner: root
     group: root
-    mode: 0600
+    mode: '0600'
     validate: bash -c 'cat %s | /sbin/{{ item.0 }}-restore --test'
   loop:
     - - iptables
@@ -74,7 +74,7 @@
     dest: "/etc/iptables/{{ item.1 }}"
     owner: root
     group: root
-    mode: 0600
+    mode: '0600'
     validate: bash -c 'cat %s | /sbin/{{ item.0 }}-restore --test'
   loop:
     - - iptables

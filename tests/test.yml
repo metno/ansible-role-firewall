@@ -1,9 +1,10 @@
 # vim: ai et ts=2 st=2 sw=2 :
 ---
-- hosts: all
+- name: Test firewall role
+  hosts: all
   become: true
   roles:
-    - role: ../../.
+    - role: ../../.  # noqa role-name[path]
       firewall_flush_on_change: false
       firewall_policy_input: DROP
       firewall_policy_forward: DROP
