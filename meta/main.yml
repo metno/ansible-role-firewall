@@ -6,7 +6,7 @@ galaxy_info:
   description: Generic firewall role for Linux
   company: MET Norway
   role_name: firewall
-  namespace: met
+  namespace: metno
 
   license: GPLv2
 
@@ -15,6 +15,7 @@ galaxy_info:
   platforms:
     - name: "Ubuntu"
       versions:
+        - "noble"
         - "jammy"
         - "focal"
         - "bionic"
