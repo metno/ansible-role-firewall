@@ -38,6 +38,7 @@ This role is limited to
 * Ubuntu 22.04 - Jammy
 * Ubuntu 20.04 - Focal
 * Ubuntu 18.04 - Bionic
+* Ubuntu 16.04 - Xenial
 * CentOS 7
 * CentOS Stream 8
 * RHEL 8
