@@ -6,7 +6,7 @@ A simple firewall for Linux hosts, based on the common iptables/netfilter comman
 Version
 -------
 
-* `5.0.0` --- added support for ubuntu 24.04, removed support for ubuntu 16.04
+* `4.1.0` --- added support for ubuntu 24.04
 * `4.0.1` --- bug fix, ansible-lint
 * `4.0.0` --- update to ansible 2.12.9
 * `3.8.0` --- add RHEL9 and CentOS Stream 8 support
