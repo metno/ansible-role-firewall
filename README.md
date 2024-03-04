@@ -6,7 +6,7 @@ A simple firewall for Linux hosts, based on the common iptables/netfilter comman
 Version
 -------
 
-* `4.1.0` --- support for ubuntu 24.04
+* `5.0.0` --- added support for ubuntu 24.04, removed support for ubuntu 16.04
 * `4.0.1` --- bug fix, ansible-lint
 * `4.0.0` --- update to ansible 2.12.9
 * `3.8.0` --- add RHEL9 and CentOS Stream 8 support
@@ -38,7 +38,6 @@ This role is limited to
 * Ubuntu 22.04 - Jammy
 * Ubuntu 20.04 - Focal
 * Ubuntu 18.04 - Bionic
-* Ubuntu 16.04 - Xenial
 * CentOS 7
 * CentOS Stream 8
 * RHEL 8
