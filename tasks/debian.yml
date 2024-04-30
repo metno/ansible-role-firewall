@@ -7,8 +7,6 @@
 
 - name: Check if ufw package is installed (on debian)
   ansible.builtin.shell: dpkg --get-selections ufw | grep install
-  args:
-    warn: false
   register: ufw_installed
   ignore_errors: true
   changed_when: false
@@ -25,14 +23,18 @@
     - firewall_disable_ufw
     - ufw_installed.rc == 0
 
+- name: Update cache
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: "{{ 3600 * 3 }}"
+  check_mode: false
+
 - name: Add persistance for iptables
   ansible.builtin.apt:
     name:
       - iptables
       - iptables-persistent
     force_apt_get: true
-    update_cache: true
-    cache_valid_time: "{{ 3600 * 3 }}"
 
 - name: Iptables templates
   ansible.builtin.template:
