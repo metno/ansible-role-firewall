@@ -1,3 +1,6 @@
 skip_list:
   - no-handler
   - no-changed-when
+
+exclude_paths:
+  - molecule/
