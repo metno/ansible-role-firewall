@@ -75,12 +75,6 @@ Role Variables
 * `firewall_echo_request_from_ipv4` --- comma separated string with addresses/nets to allow ICMP echo request from, default not defined
 * `firewall_echo_request_from_ipv6` --- comma separated string with addresses/nets to allow ICMP6 echo request from, default not defined
 
-Dependencies
-------------
-
-The RHEL8 image needs to be registered with RedHat to install
-packages.
-
 Example Playbook
 ----------------
 
