@@ -6,6 +6,7 @@ A simple firewall for Linux hosts, based on the common iptables/netfilter comman
 Version
 -------
 
+* `5.0.1` --- Moved testing to Ansible Molecule
 * `5.0.0` --- Updated for ansible-core 2.16. Removed support for Ubuntu Xenial and Ubuntu Bionic.
 * `4.1.1` --- update meta/main.yml
 * `4.1.0` --- added support for ubuntu 24.04
@@ -74,12 +75,6 @@ Role Variables
 * `firewall_echo_request_from_ipv4` --- comma separated string with addresses/nets to allow ICMP echo request from, default not defined
 * `firewall_echo_request_from_ipv6` --- comma separated string with addresses/nets to allow ICMP6 echo request from, default not defined
 
-Dependencies
-------------
-
-The RHEL8 image needs to be registered with RedHat to install
-packages.
-
 Example Playbook
 ----------------
 
@@ -108,34 +103,26 @@ Example Playbook
 Testing
 -------
 
-To test RHEL8 with vagrant, install `vagrant-register`:
+Testing is done using Ansible Molecule. It uses Vagrant with libvirt as backend.
+
+To run full test run:
 
 ```bash
-vagrant plugin install vagrant-registration
+molecule test
 ```
 
-### Test environment for all OSes
+To run test step by step run:
 
 ```bash
-cd tests
-vagrant up
+molecule create
+molecule converge
+molecule verify
+molecule destroy
 ```
 
-### Rerun role
-
-Run role on all OSes again.
-
-```bash
-vagrant provision
+To run toward specific scenario use `-s` option.
 ```
-
-### Debug interactively
-
-This uses cluster ssh to work with all vagrant boxes at the same time.
-
-```bash
-vagrant ssh-config > ~/.ssh/config
-cat ~/.ssh/config | grep ^Host | cut -d\  -f2 | xargs cssh
+molecule test -s ubuntu
 ```
 
 License

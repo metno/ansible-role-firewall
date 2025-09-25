@@ -1,7 +1,7 @@
 # vim: ai et ts=2 st=2 sw=2 :
 ---
 - name: Check if firewalld is installed (on redhat)
-  ansible.builtin.yum:
+  ansible.builtin.dnf:
     list: firewalld
   register: firewall_installed
 
@@ -15,19 +15,19 @@
     - firewall_disable_firewalld
     - firewall_installed.results | selectattr("yumstate", "match", "installed")|list|length > 0
 
-- name: Install iptables centos 7
+- name: Install iptables # noqa fqcn[action-core]
   ansible.builtin.yum:
     name:
       - iptables
       - iptables-services
   when: ansible_distribution_major_version | int == 7
 
-- name: Install iptables centos/rhel 8
+- name: Install iptables
   ansible.builtin.dnf:
     name:
       - iptables
       - iptables-services
-  when: ansible_distribution_major_version|int in [8,9]
+  when: ansible_distribution_major_version | int in [8, 9]
 
 - name: Enable firewall on boot
   ansible.builtin.service:

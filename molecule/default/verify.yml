@@ -1,0 +1,97 @@
+- name: Verify
+  become: true
+  hosts: all
+  gather_facts: true
+  vars:
+    iptables_policies:
+      - { chain: "INPUT", policy: "DROP", type: "ipv4" }
+      - { chain: "FORWARD", policy: "DROP", type: "ipv4" }
+      - { chain: "OUTPUT", policy: "ACCEPT", type: "ipv4" }
+      - { chain: "INPUT", policy: "DROP", type: "ipv6" }
+      - { chain: "FORWARD", policy: "DROP", type: "ipv6" }
+      - { chain: "OUTPUT", policy: "ACCEPT", type: "ipv6" }
+    iptables_rules:
+      - { rule: "fw4-input -p tcp -m tcp --dport 22 -j ACCEPT", type: "ipv4" }
+      - { rule: "fw4-input -s 10.0.0.0/24 -j ACCEPT", type: "ipv4" }
+      - { rule: "fw6-input -p tcp -m tcp --dport 22 -j ACCEPT", type: "ipv6" }
+      - { rule: "fw6-input  -s fe80::/10 -d fe80::/10 -p udp -m udp --sport 547 --dport 546 -j ACCEPT", type: "ipv6" }
+    ufw_service: ufw.service
+    firewalld_service: firewalld.service
+
+  tasks:
+    - name: Gather service facts
+      ansible.builtin.service_facts:
+
+    - name: Check if the service exists
+      ansible.builtin.set_fact:
+        ufw_exists: "{{ ufw_service in ansible_facts.services }}"
+
+    - name: Assert that the UFW service is disabled
+      ansible.builtin.assert:
+        that:
+          - ansible_facts.services[ufw_service].status == "disabled"
+        fail_msg: "The service {{ ufw_service }} is enabled"
+        success_msg: "The service {{ ufw_service }} is disabled"
+      when: ufw_exists
+
+    - name: Check if the service exists
+      ansible.builtin.set_fact:
+        firewalld_exists: "{{ firewalld_service in ansible_facts.services }}"
+
+    - name: Assert that the firewalld service is disabled
+      ansible.builtin.assert:
+        that:
+          - ansible_facts.services[firewalld_service].status == "disabled"
+        fail_msg: "The service {{ firewalld_service }} is enabled"
+        success_msg: "The service {{ firewalld_service }} is disabled"
+      when: firewalld_exists
+
+    - name: Check iptables rules for IPv4 and IPv6
+      shell: >
+        {% if item.type == "ipv4" %}
+        iptables -C {{ item.rule }}
+        {% elif item.type == "ipv6" %}
+        ip6tables -C {{ item.rule }}
+        {% endif %}
+      register: iptables_check
+      with_items: "{{ iptables_rules }}"
+      ignore_errors: yes  # Allow rule checks to fail without interrupting the process
+      loop_control:
+        label: "{{ item.rule }} ({{ item.type }})"  # Show rule and type in output
+
+    - name: Assert that all iptables rules exist
+      assert:
+        that:
+          - item.rc == 0
+        fail_msg: "The iptables rule '{{ item.item.rule }}' for {{ item.item.type }} is NOT set correctly."
+        success_msg: "The iptables rule '{{ item.item.rule }}' for {{ item.item.type }} is set correctly."
+      with_items: "{{ iptables_check.results }}"
+
+    - name: Check iptables policies for IPv4 and IPv6
+      shell: >
+        {% if item.type == "ipv4" %}
+        iptables -L {{ item.chain }} -n | grep "Chain {{ item.chain }} (policy {{ item.policy }}"
+        {% elif item.type == "ipv6" %}
+        ip6tables -L {{ item.chain }} -n | grep "Chain {{ item.chain }} (policy {{ item.policy }}"
+        {% endif %}
+      register: iptables_policy_check
+      with_items: "{{ iptables_policies }}"
+      ignore_errors: yes  # Allow the task to continue even if a policy doesn't match
+      loop_control:
+        label: "{{ item.chain }} ({{ item.type }})"
+
+    - name: Display success message for valid policies
+      debug:
+        msg: "SUCCESS: The policy for chain '{{ item.item.chain }}' is correctly set to '{{ item.item.policy }}' for {{ item.item.type }}."
+      when: item.rc == 0
+      with_items: "{{ iptables_policy_check.results }}"
+      loop_control:
+        label: "{{ item.item.chain }} ({{ item.item.type }})"
+
+    - name: Fail if a policy is incorrect or missing
+      fail:
+        msg: "ERROR: The policy for chain '{{ item.item.chain }}' is NOT set to '{{ item.item.policy }}' for {{ item.item.type }}."
+      when: item.rc != 0
+      with_items: "{{ iptables_policy_check.results }}"
+      loop_control:
+        label: "{{ item.item.chain }} ({{ item.item.type }})"
