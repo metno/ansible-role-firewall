@@ -27,7 +27,7 @@
     name:
       - iptables
       - iptables-services
-  when: ansible_distribution_major_version | int in [8, 9]
+  when: ansible_distribution_major_version | int > 7
 
 - name: Enable firewall on boot
   ansible.builtin.service:
