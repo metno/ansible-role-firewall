@@ -6,6 +6,7 @@ A simple firewall for Linux hosts, based on the common iptables/netfilter comman
 Version
 -------
 
+* `5.1.0` --- Added support for RHEL10. The role now supports os_family = redhat.
 * `5.0.1` --- Moved testing to Ansible Molecule
 * `5.0.0` --- Updated for ansible-core 2.16. Removed support for Ubuntu Xenial and Ubuntu Bionic.
 * `4.1.1` --- update meta/main.yml
@@ -35,15 +36,13 @@ Version
 Requirements
 ------------
 
-This role is limited to
+This role supports
 
-* Ubuntu 24.04 - Noble
-* Ubuntu 22.04 - Jammy
-* Ubuntu 20.04 - Focal
+* RedHat Based OS, version 8,9,10
+* Ubuntu 20.04, 22.04, and 24.04
 * CentOS 7
 * CentOS Stream 8
-* RHEL 8
-* RHEL 9
+
 
 Role Variables
 --------------
