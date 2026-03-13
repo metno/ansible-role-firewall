@@ -6,6 +6,7 @@ A simple firewall for Linux hosts, based on the common iptables/netfilter comman
 Version
 -------
 
+* `5.1.1` --- Updated molecule test setup
 * `5.1.0` --- Added support for RHEL10. The role now supports os_family = redhat.
 * `5.0.1` --- Moved testing to Ansible Molecule
 * `5.0.0` --- Updated for ansible-core 2.16. Removed support for Ubuntu Xenial and Ubuntu Bionic.
@@ -102,9 +103,11 @@ Example Playbook
 Testing
 -------
 
-Testing is done using Ansible Molecule. It uses Vagrant with libvirt as backend.
+Testing is done using Ansible Molecule. It uses our libvirt-provision role as backend.
 
-To run full test run:
+Testing is done on Almalinux and Ubuntu.
+
+To run test:
 
 ```bash
 molecule test
@@ -115,13 +118,9 @@ To run test step by step run:
 ```bash
 molecule create
 molecule converge
+molecule idempotence
 molecule verify
 molecule destroy
-```
-
-To run toward specific scenario use `-s` option.
-```
-molecule test -s ubuntu
 ```
 
 License
