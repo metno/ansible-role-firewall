@@ -6,6 +6,7 @@ A simple firewall for Linux hosts, based on the common iptables/netfilter comman
 Version
 -------
 
+* `6.0.0` --- Added support for Resolute Raccoon and remove Focal Fossa
 * `5.1.1` --- Updated molecule test setup
 * `5.1.0` --- Added support for RHEL10. The role now supports os_family = redhat.
 * `5.0.1` --- Moved testing to Ansible Molecule
@@ -40,7 +41,7 @@ Requirements
 This role supports
 
 * RedHat Based OS, version 8,9,10
-* Ubuntu 20.04, 22.04, and 24.04
+* Ubuntu 22.04, 24.04, and 26.04
 * CentOS 7
 * CentOS Stream 8
 

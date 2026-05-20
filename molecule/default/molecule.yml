@@ -6,6 +6,7 @@ driver:
     login_cmd_template: "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -l {user} {address}"
 
 platforms:
+  - name: firewall-resolute
   - name: firewall-noble
   - name: firewall-jammy
   - name: firewall-alma8
